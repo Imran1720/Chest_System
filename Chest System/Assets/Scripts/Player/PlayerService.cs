@@ -16,4 +16,10 @@ public class PlayerService : MonoBehaviour
 
     public int GetCoinCount() => playerController.GetCoinCount();
     public int GetGemCount() => playerController.GetGemCount();
+
+    public void IncrementCoinsBy(int value) => playerController.IncrementPlayerCoinsBy(value);
+    public void IncrementGemsBy(int value) => playerController.IncrementPlayerGemsBy(value);
+
+    public void DecrementCoinsBy(int value) => playerController.DecrementPlayerCoinsBy(value);
+    public void DecrementGemsBy(int value) => playerController.DecrementPlayerGemsBy(value);
 }
