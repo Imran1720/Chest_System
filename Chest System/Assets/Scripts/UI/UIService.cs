@@ -1,38 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
+using ChestSystem.Player;
 using TMPro;
 using UnityEngine;
 
-public class UIService : MonoBehaviour
+namespace ChestSystem.UI
 {
-    public static UIService Instance;
-
-    private PlayerService playerService;
-
-    [Header("CURRENCY")]
-    [SerializeField] private TextMeshProUGUI coinCountText;
-    [SerializeField] private TextMeshProUGUI gemCountText;
-
-
-    private void Awake()
+    public class UIService : MonoBehaviour
     {
-        Instance = this;
+        public static UIService Instance;
+        private PlayerService playerService;
+
+        [Header("CURRENCY")]
+        [SerializeField] private TextMeshProUGUI coinCountText;
+        [SerializeField] private TextMeshProUGUI gemCountText;
+
+        private void Awake()
+        {
+            Instance = this;
+        }
+
+        private void Start()
+        {
+            playerService = new PlayerService(100, 100);
+            UpdateCurrencies();
+        }
+
+        public void UpdateCurrencies()
+        {
+            UpdateCoinCount();
+            UpdateGemCount();
+        }
+
+        private void UpdateCoinCount() => coinCountText.text = playerService.GetCoinCount().ToString();
+        private void UpdateGemCount() => gemCountText.text = playerService.GetGemCount().ToString();
     }
-
-    private void Start()
-    {
-        playerService = new PlayerService(100, 100);
-        UpdateCurrencies();
-    }
-
-    public void UpdateCurrencies()
-    {
-        UpdateCoinCount();
-        UpdateGemCount();
-    }
-
-    private void UpdateCoinCount() => coinCountText.text = playerService.GetCoinCount().ToString();
-    private void UpdateGemCount() => gemCountText.text = playerService.GetGemCount().ToString();
-
-
 }
