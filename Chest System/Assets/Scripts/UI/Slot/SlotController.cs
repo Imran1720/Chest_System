@@ -5,17 +5,17 @@ namespace ChestSystem.UI.Slot
 {
     public class SlotController
     {
-        private Slot slotPrefab;
-        private List<Slot> slotList;
+        private SlotData slotPrefab;
+        private List<SlotData> slotList;
 
         private GameObject slotsContainer;
 
-        public SlotController(Slot slotPrefab, GameObject slotsContainer, int initialSlotsCount)
+        public SlotController(SlotData slotPrefab, GameObject slotsContainer, int initialSlotsCount)
         {
             this.slotPrefab = slotPrefab;
             this.slotsContainer = slotsContainer;
 
-            slotList = new List<Slot>();
+            slotList = new List<SlotData>();
 
             SpawnInitialSlots(initialSlotsCount);
         }
@@ -28,23 +28,24 @@ namespace ChestSystem.UI.Slot
             }
         }
 
-        public bool CanAddChest() => GetEmptySlotCount() > 0;
+        public bool IsEmptySlotAvailable() => GetEmptySlotCount() > 0;
 
-        public Slot GetEmptySlot() => slotList.Find(slot => slot.isSlotEmpty());
+        public SlotData GetEmptySlot() => slotList.Find(slot => slot.isSlotEmpty());
 
         public void AddEmptySlot()
         {
-            Slot slot = GameObject.Instantiate(slotPrefab);
+            SlotData slot = GameObject.Instantiate(slotPrefab);
             slot.transform.SetParent(slotsContainer.transform, false);
             slotList.Add(slot);
         }
 
-        public void EmptySlot(Slot slotToBeEmptied) => slotToBeEmptied.EmptySlot();
+        public void EmptySlot(SlotData slotToBeEmptied) => slotToBeEmptied.EmptySlot();
+        public void FillSlot(SlotData slotToBeFilled) => slotToBeFilled.FillSlot();
 
         private int GetEmptySlotCount()
         {
             int count = 0;
-            foreach (Slot slot in slotList)
+            foreach (SlotData slot in slotList)
             {
                 if (slot.isSlotEmpty()) count++;
             }
