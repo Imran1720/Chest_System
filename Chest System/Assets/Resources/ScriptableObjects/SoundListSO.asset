@@ -12,3 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a6159826a150674fbf8a3a4b243ffae, type: 3}
   m_Name: SoundListSO
   m_EditorClassIdentifier: 
+  audioList:
+  - soundType: 0
+    audioClip: {fileID: 0}
+  - soundType: 1
+    audioClip: {fileID: 0}
+  - soundType: 2
+    audioClip: {fileID: 0}
+  - soundType: 3
+    audioClip: {fileID: 0}
+  - soundType: 4
+    audioClip: {fileID: 0}
+  - soundType: 5
+    audioClip: {fileID: 0}
+  - soundType: 6
+    audioClip: {fileID: 0}
