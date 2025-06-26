@@ -1,4 +1,5 @@
 using ChestSystem.Player;
+using ChestSystem.UI.PopUp;
 using ChestSystem.UI.Slot;
 using System;
 using TMPro;
@@ -12,6 +13,10 @@ namespace ChestSystem.UI
         public static UIService Instance;
         private PlayerService playerService;
         private SlotService slotService;
+        private PopUpService popUpService;
+
+        [Header("PopUp-UI")]
+        [SerializeField] private PopUpService popUpServicePrefab;
 
         [Header("CURRENCY")]
         [SerializeField] private TextMeshProUGUI coinCountText;
@@ -24,6 +29,7 @@ namespace ChestSystem.UI
         [SerializeField] private Button addSlotButton;
 
 
+
         private void Awake()
         {
             Instance = this;
@@ -31,9 +37,16 @@ namespace ChestSystem.UI
 
         private void Start()
         {
+            CreateData();
             InitializeSevices();
             InitializeButtonListeners();
             UpdateCurrencies();
+        }
+
+        private void CreateData()
+        {
+            popUpService = Instantiate(popUpServicePrefab);
+            popUpService.transform.SetParent(transform, false);
         }
 
         private void InitializeButtonListeners()
@@ -53,6 +66,20 @@ namespace ChestSystem.UI
             UpdateGemCount();
         }
 
+
+        private void Update()
+        {
+            if (Input.GetKeyUp(KeyCode.A))
+            {
+                popUpService.ShowBuyPopUP();
+            }
+
+            if (Input.GetKeyUp(KeyCode.S))
+            {
+                popUpService.ShowWarningPopUP();
+            }
+
+        }
         private void UpdateCoinCount() => coinCountText.text = playerService.GetCoinCount().ToString();
         private void UpdateGemCount() => gemCountText.text = playerService.GetGemCount().ToString();
 
