@@ -69,15 +69,18 @@ namespace ChestSystem.UI
 
         private void Update()
         {
-            if (Input.GetKeyUp(KeyCode.A))
-            {
-                popUpService.ShowBuyPopUP();
-            }
+            //if (Input.GetKeyUp(KeyCode.A))
+            //{
+            //    int timerValueInMinutes = 11;
+            //    float time = (float)timerValueInMinutes / 10;
+            //    int buyingCost = (int)Mathf.Ceil(time) * 10;
+            //    Debug.Log(time + " " + buyingCost);
+            //}
 
-            if (Input.GetKeyUp(KeyCode.S))
-            {
-                popUpService.ShowWarningPopUP();
-            }
+            //if (Input.GetKeyUp(KeyCode.S))
+            //{
+            //    popUpService.ShowWarningPopUP();
+            //}
 
         }
         private void UpdateCoinCount() => coinCountText.text = playerService.GetCoinCount().ToString();

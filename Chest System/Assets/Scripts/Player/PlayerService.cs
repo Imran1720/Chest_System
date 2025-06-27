@@ -1,7 +1,7 @@
 using UnityEngine;
 namespace ChestSystem.Player
 {
-    public class PlayerService : MonoBehaviour
+    public class PlayerService
     {
         PlayerController playerController;
         public PlayerService(int initialCoinCount, int initalGemCount)
