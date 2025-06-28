@@ -6,6 +6,7 @@ namespace ChestSystem.Chest
         public void OnStateEntered();
         public void Update();
         public void OnStateExited();
+        public void OnClick();
 
     }
 }

@@ -22,6 +22,8 @@ namespace ChestSystem.Chest
         {
             chestStatesList.Add(EChestState.LOCKED, new LockedState(this, controller));
             chestStatesList.Add(EChestState.UNLOCKING, new UnlockingState(this, controller));
+            chestStatesList.Add(EChestState.UNLOCKED, new UnlockedState(this, controller));
+            chestStatesList.Add(EChestState.COLLECTED, new CollectedState(this, controller));
         }
 
         public void ChangeState(EChestState state)
@@ -30,6 +32,8 @@ namespace ChestSystem.Chest
             currentState = GetState(state);
             currentState?.OnStateEntered();
         }
+
+        public void ProcessOnClick() => currentState.OnClick();
 
         private IState GetState(EChestState state) => chestStatesList[state];
     }

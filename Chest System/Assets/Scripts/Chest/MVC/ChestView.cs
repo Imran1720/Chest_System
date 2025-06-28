@@ -1,4 +1,5 @@
 using ChestSystem.Chest;
+using ChestSystem.UI;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -14,21 +15,26 @@ public class ChestView : MonoBehaviour, IPointerDownHandler
 
     [SerializeField] private Image chestIcon;
 
+    [SerializeField] private GameObject lockedStateUI;
+    [SerializeField] private GameObject payUI;
+    [SerializeField] private GameObject OpenUI;
+
     private ChestController chestController;
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        chestController.StartChestTimer();
+        chestController.OnSelectingChest();
     }
 
     public void SetState(EChestState state) => chestStateText.text = GetChestStateText(state);
-    public void SetTimer(int minute)
+    public void SetTimer(int hour, int minute)
     {
+        OpenDurationText.text = "";
         //if (hour > 0)
         //{
-        //    OpenDurationText.text += hour + "H";
+        //    OpenDurationText.text += hour + "H ";
         //}
-        OpenDurationText.text = minute + "M";
+        OpenDurationText.text += minute + "M";
     }
 
     public void SetOpeningCost(int cost) => openingCostText.text = cost.ToString();
@@ -49,6 +55,13 @@ public class ChestView : MonoBehaviour, IPointerDownHandler
                 return "LOCKED";
 
         }
+    }
+
+    public void SetLockedUI(bool value)
+    {
+        lockedStateUI.SetActive(value);
+        payUI.SetActive(value);
+        OpenUI.SetActive(!value);
     }
 
     public void SetChestController(ChestController chestController) => this.chestController = chestController;

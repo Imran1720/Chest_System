@@ -1,3 +1,6 @@
+
+using UnityEngine;
+
 namespace ChestSystem.Chest
 {
     public class LockedState : IState
@@ -12,7 +15,8 @@ namespace ChestSystem.Chest
         }
         public void OnStateEntered()
         {
-            ChestController.RefreshChestUI(EChestState.LOCKED, ChestController.GetChestOpenDuration());
+            ChestController.SetLockedUI(true);
+            ChestController.UpdateChestUI(EChestState.LOCKED);
         }
 
         public void OnStateExited()
@@ -22,6 +26,12 @@ namespace ChestSystem.Chest
         public void Update()
         {
 
+        }
+
+        public void OnClick()
+        {
+            // pop up to start timer or buy
+            chestStateMachine.ChangeState(EChestState.UNLOCKING);
         }
     }
 }

@@ -1,3 +1,4 @@
+using ChestSystem.UI;
 using System;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace ChestSystem.Chest
         private ChestStateMachine chestStateMachine;
 
         private float timer;
+        private int costUpdateThreshold;
         public UnlockingState(ChestStateMachine chestStateMachine, ChestController chestController)
         {
             this.chestStateMachine = chestStateMachine;
@@ -17,37 +19,41 @@ namespace ChestSystem.Chest
 
         public void OnStateEntered()
         {
+            UIService.Instance.GetChestService().SetUnlockingChest(false);
+            ChestController.SetLockedUI(true);
             ChestController.SetChestUnlockingUI();
             timer = ChestController.GetChestOpenDuration() * 60;
+            costUpdateThreshold = 10;
         }
 
         public void OnStateExited()
         {
-            throw new System.NotImplementedException();
+            // throw new System.NotImplementedException();
+            UIService.Instance.GetChestService().SetUnlockingChest(true);
         }
 
         public void Update()
         {
             timer -= Time.deltaTime;
-            Debug.Log((int)timer);
-            UpdateTime();
-            if ((int)timer % 60 == 0)
+            if (CanUpdateCost())
             {
-                UpdateCost();
+                ChestController.UpdateCost(timer);
             }
+            ChestController.UpdateTime(timer);
         }
 
-        private void UpdateCost()
+        private bool CanUpdateCost()
         {
-            //int timeInMinute = ((int)timer / 60);
-            //float timeforCalculation = (float)timeInMinute / 10;
-            //int gems = (int)Mathf.Ceil(timeforCalculation);
-            ChestController.SetChestGemPrice((int)(timer / 60));
+            int updateVector = costUpdateThreshold * 60;
+
+            return (((int)timer % updateVector) == 0);
         }
 
-        private void UpdateTime()
+        public void OnClick()
         {
-
+            // pop up to buy with gems
+            Debug.Log("Changing to Unlocked State");
+            chestStateMachine.ChangeState(EChestState.UNLOCKED);
         }
     }
 }

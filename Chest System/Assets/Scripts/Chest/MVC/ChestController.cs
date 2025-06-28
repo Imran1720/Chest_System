@@ -18,7 +18,7 @@ namespace ChestSystem.Chest
             this.slotData = slotData;
 
             this.chestView.SetChestController(this);
-            chestStateMachine = new ChestStateMachine(this);
+            CreateChestStateMachine();
             chestStateMachine.ChangeState(EChestState.LOCKED);
             CalculateReward();
         }
@@ -28,44 +28,31 @@ namespace ChestSystem.Chest
             chestStateMachine.Update();
         }
 
-        public void RefreshChestUI(EChestState currentState, int timeleft)
+        public void UpdateChestUI(EChestState currentState)
         {
             ChestData chestData = chestModel.GetChestData();
             chestView.SetState(currentState);
-            chestView.SetTimer(chestData.openDurationInMinutes);
+
+            int timer = chestData.openDurationInMinutes * 60;
+            chestView.SetTimer(CalculateHours(timer), CalculateMinutes(timer));
+
             chestView.SetChestIcon(chestData.chestIcon);
-            chestView.SetOpeningCost(CalculateChestBuyingCost(timeleft));
+            chestView.SetOpeningCost(CalculateChestBuyingCost(timer));
         }
 
-        public void SetChestRarity() { }
+        public void SetChestTime(int minute, int second) => chestView.SetTimer(minute, second);
 
-        public void SetChestTime(int minute, int second) { }
+        public void SetChestIcon(Sprite chestSprite) => chestView.SetChestIcon(chestSprite);
 
-        public void SetChestIcon() { }
+        public void SetChestGemPrice(int price) => chestView.SetOpeningCost(price);
 
-        public void SetChestGemPrice(int price)
-        {
-            chestView.SetOpeningCost(price);
-        }
+        private void CreateChestStateMachine() => chestStateMachine = new ChestStateMachine(this);
 
-        private void CreateChestStateMachine()
-        {
-            //Create Chest statemachine
-        }
+        public void OnSelectingChest() => chestStateMachine.ProcessOnClick();
 
-        public void StartChestTimer()
-        {
-            chestStateMachine.ChangeState(EChestState.UNLOCKING);
-        }
-        private void OpenWithGems()
-        {
-            //Change state to Unlocked and deduct gems from player
-        }
+        private void OpenWithGems() => chestStateMachine.ChangeState(EChestState.UNLOCKED);
 
-        public void SetChestUnlockingUI()
-        {
-            //call funtion in view to hide un necessary UI and show related UI
-        }
+        public void SetChestUnlockingUI() => chestStateMachine.ChangeState(EChestState.UNLOCKING);
 
         private void CalculateReward()
         {
@@ -73,12 +60,12 @@ namespace ChestSystem.Chest
             CalculateGemsToBeRewarded();
         }
 
-        public int CalculateChestBuyingCost(int timerValueInMinutes)
+        public int CalculateChestBuyingCost(float timer)
         {
-            float time = (float)timerValueInMinutes / 10;
-            int buyingCost = (int)Mathf.Ceil(time) * 10;
+            int elapsedTime = (int)timer / 60;
+            int gemsRequired = (int)(Mathf.Ceil(elapsedTime / 10));
 
-            return buyingCost;
+            return gemsRequired;
         }
 
         private void CalculateCoinsToBeRewarded()
@@ -103,5 +90,24 @@ namespace ChestSystem.Chest
         public int GetGemsToBeRewarded() => chestModel.GetGemsToBeRewarded();
 
         public int GetChestOpenDuration() => chestModel.GetOpenDuration();
+
+        public int CalculateMinutes(float timer) => (int)timer / 60;
+        public int CalculateHours(float timer) => (int)timer / (60 * 60);
+
+        public void UpdateCost(float timer)
+        {
+            int gemsRequired = CalculateChestBuyingCost(timer);
+            SetChestGemPrice(gemsRequired);
+        }
+
+        public void UpdateTime(float timer)
+        {
+            int hours = CalculateHours(timer);
+            int minutes = CalculateMinutes(timer);
+
+            SetChestTime(hours, minutes);
+        }
+
+        public void SetLockedUI(bool value) => chestView.SetLockedUI(value);
     }
 }

@@ -104,5 +104,7 @@ namespace ChestSystem.UI
 
             chestService.CreateChest(slotData);
         }
+
+        public ChestService GetChestService() => chestService;
     }
 }
