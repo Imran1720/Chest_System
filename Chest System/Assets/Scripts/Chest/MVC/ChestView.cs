@@ -19,6 +19,8 @@ public class ChestView : MonoBehaviour, IPointerDownHandler
     [SerializeField] private GameObject payUI;
     [SerializeField] private GameObject OpenUI;
 
+    [SerializeField] private Color openBGColor;
+
     private ChestController chestController;
 
     public void OnPointerDown(PointerEventData eventData)
@@ -64,5 +66,6 @@ public class ChestView : MonoBehaviour, IPointerDownHandler
         OpenUI.SetActive(!value);
     }
 
+    public void SetOpenedChestBG() => GetComponent<Image>().color = openBGColor;
     public void SetChestController(ChestController chestController) => this.chestController = chestController;
 }

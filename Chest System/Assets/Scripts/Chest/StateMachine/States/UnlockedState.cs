@@ -19,6 +19,7 @@ namespace ChestSystem.Chest
 
         public void OnStateEntered()
         {
+            ChestController.SetOpenedChestBG();
             ChestController.SetLockedUI(false);
         }
 

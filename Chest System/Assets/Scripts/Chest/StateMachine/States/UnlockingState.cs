@@ -10,7 +10,7 @@ namespace ChestSystem.Chest
         private ChestStateMachine chestStateMachine;
 
         private float timer;
-        private int costUpdateThreshold;
+        private int costUpdateThreshold = 10;
         public UnlockingState(ChestStateMachine chestStateMachine, ChestController chestController)
         {
             this.chestStateMachine = chestStateMachine;
@@ -21,9 +21,7 @@ namespace ChestSystem.Chest
         {
             UIService.Instance.GetChestService().SetUnlockingChest(false);
             ChestController.SetLockedUI(true);
-            ChestController.SetChestUnlockingUI();
             timer = ChestController.GetChestOpenDuration() * 60;
-            costUpdateThreshold = 10;
         }
 
         public void OnStateExited()
@@ -35,6 +33,7 @@ namespace ChestSystem.Chest
         public void Update()
         {
             timer -= Time.deltaTime;
+            Debug.Log((int)timer);
             if (CanUpdateCost())
             {
                 ChestController.UpdateCost(timer);
@@ -52,7 +51,6 @@ namespace ChestSystem.Chest
         public void OnClick()
         {
             // pop up to buy with gems
-            Debug.Log("Changing to Unlocked State");
             chestStateMachine.ChangeState(EChestState.UNLOCKED);
         }
     }

@@ -52,7 +52,7 @@ namespace ChestSystem.Chest
 
         private void OpenWithGems() => chestStateMachine.ChangeState(EChestState.UNLOCKED);
 
-        public void SetChestUnlockingUI() => chestStateMachine.ChangeState(EChestState.UNLOCKING);
+        //public void SetChestUnlockingUI() => chestStateMachine.ChangeState(EChestState.UNLOCKING);
 
         private void CalculateReward()
         {
@@ -107,6 +107,8 @@ namespace ChestSystem.Chest
 
             SetChestTime(hours, minutes);
         }
+
+        public void SetOpenedChestBG() => chestView.SetOpenedChestBG();
 
         public void SetLockedUI(bool value) => chestView.SetLockedUI(value);
     }
