@@ -9,20 +9,33 @@ namespace ChestSystem.Chest
         private ChestModel chestModel;
         private SlotData slotData;
 
+        private ChestStateMachine chestStateMachine;
+
         public ChestController(ChestView chestView, ChestModel chestModel, SlotData slotData)
         {
             this.chestView = chestView;
             this.chestModel = chestModel;
             this.slotData = slotData;
+
+            this.chestView.SetChestController(this);
+            chestStateMachine = new ChestStateMachine(this);
+            chestStateMachine.ChangeState(EChestState.LOCKED);
             CalculateReward();
         }
 
         public void Update()
         {
-
+            chestStateMachine.Update();
         }
 
-        public void RefreshChestUI() { }
+        public void RefreshChestUI(EChestState currentState, int timeleft)
+        {
+            ChestData chestData = chestModel.GetChestData();
+            chestView.SetState(currentState);
+            chestView.SetTimer(chestData.openDurationInMinutes);
+            chestView.SetChestIcon(chestData.chestIcon);
+            chestView.SetOpeningCost(CalculateChestBuyingCost(timeleft));
+        }
 
         public void SetChestRarity() { }
 
@@ -30,20 +43,28 @@ namespace ChestSystem.Chest
 
         public void SetChestIcon() { }
 
-        public void SetChestGemPrice(int price) { }
+        public void SetChestGemPrice(int price)
+        {
+            chestView.SetOpeningCost(price);
+        }
 
         private void CreateChestStateMachine()
         {
             //Create Chest statemachine
         }
 
-        private void StartChestTimer()
+        public void StartChestTimer()
         {
-            //Change State to Unlocking
+            chestStateMachine.ChangeState(EChestState.UNLOCKING);
         }
         private void OpenWithGems()
         {
             //Change state to Unlocked and deduct gems from player
+        }
+
+        public void SetChestUnlockingUI()
+        {
+            //call funtion in view to hide un necessary UI and show related UI
         }
 
         private void CalculateReward()
@@ -52,7 +73,7 @@ namespace ChestSystem.Chest
             CalculateGemsToBeRewarded();
         }
 
-        public int ClaculateChestBuyingCost(int timerValueInMinutes)
+        public int CalculateChestBuyingCost(int timerValueInMinutes)
         {
             float time = (float)timerValueInMinutes / 10;
             int buyingCost = (int)Mathf.Ceil(time) * 10;
@@ -81,20 +102,6 @@ namespace ChestSystem.Chest
         public int GetCoinsToBeRewarded() => chestModel.GetCoinsToBeRewarded();
         public int GetGemsToBeRewarded() => chestModel.GetGemsToBeRewarded();
 
-        public string GetChestRarityText()
-        {
-            switch (chestModel.GetChesRarity())
-            {
-                case EChestType.LEGENDARY:
-                    return "LEGENDARY";
-                case EChestType.EPIC:
-                    return "EPIC";
-                case EChestType.RARE:
-                    return "RARE";
-                default:
-                    return "COMMON";
-
-            }
-        }
+        public int GetChestOpenDuration() => chestModel.GetOpenDuration();
     }
 }

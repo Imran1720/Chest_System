@@ -27,5 +27,6 @@ namespace ChestSystem.Chest
         public void SetGemsToBeRewarded(int amount) => gemsToBeRewarded = amount;
         public EChestType GetChesRarity() => data.chestRarity;
         public Sprite GetChestIcon() => data.chestIcon;
+        public ChestData GetChestData() => data;
     }
 }

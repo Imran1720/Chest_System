@@ -1,3 +1,4 @@
+using ChestSystem.Chest;
 using ChestSystem.Player;
 using ChestSystem.UI.PopUp;
 using ChestSystem.UI.Slot;
@@ -14,6 +15,7 @@ namespace ChestSystem.UI
         private PlayerService playerService;
         private SlotService slotService;
         private PopUpService popUpService;
+        private ChestService chestService;
 
         [Header("PopUp-UI")]
         [SerializeField] private PopUpService popUpServicePrefab;
@@ -28,6 +30,10 @@ namespace ChestSystem.UI
         [SerializeField] private int initialSlotCount;
         [SerializeField] private Button addSlotButton;
 
+        [Header("CHEST-DATA")]
+        [SerializeField] ChestSO chestSO;
+        [SerializeField] ChestView chestPrefab;
+        [SerializeField] private Button generateChestButton;
 
 
         private void Awake()
@@ -37,27 +43,25 @@ namespace ChestSystem.UI
 
         private void Start()
         {
-            CreateData();
             InitializeSevices();
             InitializeButtonListeners();
             UpdateCurrencies();
         }
 
-        private void CreateData()
-        {
-            popUpService = Instantiate(popUpServicePrefab);
-            popUpService.transform.SetParent(transform, false);
-        }
 
         private void InitializeButtonListeners()
         {
             addSlotButton.onClick.AddListener(AddSlot);
+            generateChestButton.onClick.AddListener(GenerateChest);
         }
 
         private void InitializeSevices()
         {
             playerService = new PlayerService(100, 100);
             slotService = new SlotService(slotPrefab, slotContainer, initialSlotCount);
+            chestService = new ChestService(chestSO, chestPrefab);
+            popUpService = Instantiate(popUpServicePrefab);
+            popUpService.transform.SetParent(transform, false);
         }
 
         public void UpdateCurrencies()
@@ -82,10 +86,23 @@ namespace ChestSystem.UI
             //    popUpService.ShowWarningPopUP();
             //}
 
+            chestService.Update();
         }
         private void UpdateCoinCount() => coinCountText.text = playerService.GetCoinCount().ToString();
         private void UpdateGemCount() => gemCountText.text = playerService.GetGemCount().ToString();
 
         private void AddSlot() => slotService.AddEmptySlot();
+
+        private void GenerateChest()
+        {
+            if (!slotService.IsEmptySlotAvailable())
+            {
+                return;
+            }
+
+            SlotData slotData = slotService.GetEmptySlot();
+
+            chestService.CreateChest(slotData);
+        }
     }
 }

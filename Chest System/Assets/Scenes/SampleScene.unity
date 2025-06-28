@@ -337,7 +337,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.3773585, g: 0.3773585, b: 0.3773585, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1524,7 +1524,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 300}
+  m_SizeDelta: {x: 0, y: 400}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!1 &1541393646
 GameObject:
@@ -1686,8 +1686,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.55981445, y: 9.965607}
-  m_SizeDelta: {x: -34.7567, y: -19.9313}
+  m_AnchoredPosition: {x: -0.5, y: 0}
+  m_SizeDelta: {x: -35.000008, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1585588409
 MonoBehaviour:
@@ -1732,7 +1732,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1803,10 +1803,10 @@ RectTransform:
   m_Father: {fileID: 1585588408}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -522.62164, y: 0}
-  m_SizeDelta: {x: 0, y: 300}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0.00024414062, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1645412692
 MonoBehaviour:
@@ -1821,12 +1821,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 30
+    m_Left: 12
     m_Right: 0
     m_Top: 20
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 60
+  m_Spacing: 20
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -2244,6 +2244,9 @@ MonoBehaviour:
   slotPrefab: {fileID: 7112069264549154477, guid: 7da307a50656de042999a962a4a66cb8, type: 3}
   initialSlotCount: 6
   addSlotButton: {fileID: 161496035}
+  chestSO: {fileID: 11400000, guid: 3633cf96be6abd64cbb69eb3185f35d7, type: 2}
+  chestPrefab: {fileID: -8024142794937928516, guid: c9331b9257eb12a4cbb993f32d90b130, type: 3}
+  generateChestButton: {fileID: 1541393648}
 --- !u!1 &2064705067
 GameObject:
   m_ObjectHideFlags: 0

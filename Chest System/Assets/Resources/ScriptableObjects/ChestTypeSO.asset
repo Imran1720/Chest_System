@@ -19,7 +19,7 @@ MonoBehaviour:
     maxGemsRewarded: 120
     openDurationInMinutes: 15
     chestRarity: 0
-    chestIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+    chestIcon: {fileID: 21300000, guid: 45e0e7716f2b3a44bb2c28c15c52588e, type: 3}
   - minCoinsRewarded: 300
     maxCoinsRewarded: 500
     minGemsRewarded: 20
