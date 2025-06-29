@@ -21,8 +21,7 @@ namespace ChestSystem.Chest
         {
             UIService.Instance.GetChestService().SetUnlockingChest(false);
             ChestController.SetLockedUI(true);
-            //timer = ChestController.GetChestOpenDuration() * 60;
-            timer = 5;
+            timer = ChestController.GetChestOpenDuration() * 60;
         }
 
         public void OnStateExited()
