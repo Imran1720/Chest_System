@@ -1,3 +1,4 @@
+using ChestSystem.UI;
 using UnityEngine;
 
 namespace ChestSystem.Chest
@@ -19,6 +20,7 @@ namespace ChestSystem.Chest
         {
             ChestController.SetViewInactive();
             ChestController.EmptyCurrentSlot();
+            UIService.Instance.GetChestService().ReturnChestToPool(ChestController);
         }
 
         public void OnStateExited()

@@ -21,8 +21,19 @@ namespace ChestSystem.Chest
 
             this.chestView.SetChestController(this);
             CreateChestStateMachine();
-            chestStateMachine.ChangeState(EChestState.LOCKED);
+            Reset();
             CalculateReward();
+        }
+
+        public void Reset()
+        {
+            chestView.Reset();
+            ChangeToDefaultState();
+        }
+
+        public void ChangeToDefaultState()
+        {
+            chestStateMachine.ChangeState(EChestState.LOCKED);
         }
 
         public void Update()
@@ -121,5 +132,7 @@ namespace ChestSystem.Chest
 
         public void EmptyCurrentSlot() => slotData.EmptySlot();
         public EChestType GetChestRarity() => chestModel.GetChesRarity();
+
+        public void SetPosition(Transform parent) => chestView.transform.SetParent(parent, true);
     }
 }

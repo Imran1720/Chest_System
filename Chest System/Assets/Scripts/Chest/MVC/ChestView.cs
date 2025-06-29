@@ -19,10 +19,17 @@ public class ChestView : MonoBehaviour, IPointerDownHandler
     [SerializeField] private GameObject payUI;
     [SerializeField] private GameObject OpenUI;
 
+    [SerializeField] private Image background;
     [SerializeField] private Color openBGColor;
+    private Color defaultBGColor;
+
 
     private ChestController chestController;
 
+    private void Start()
+    {
+        defaultBGColor = background.color;
+    }
     public void OnPointerDown(PointerEventData eventData)
     {
         chestController.OnSelectingChest();
@@ -55,7 +62,6 @@ public class ChestView : MonoBehaviour, IPointerDownHandler
                 return "UNLOCKED";
             default:
                 return "LOCKED";
-
         }
     }
 
@@ -66,6 +72,10 @@ public class ChestView : MonoBehaviour, IPointerDownHandler
         OpenUI.SetActive(!value);
     }
 
-    public void SetOpenedChestBG() => GetComponent<Image>().color = openBGColor;
+    public void SetOpenedChestBG() => background.color = openBGColor;
     public void SetChestController(ChestController chestController) => this.chestController = chestController;
+    public void Reset()
+    {
+        background.color = defaultBGColor;
+    }
 }

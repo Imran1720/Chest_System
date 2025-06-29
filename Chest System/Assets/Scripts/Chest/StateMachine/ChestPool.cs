@@ -21,17 +21,25 @@ namespace ChestSystem.Chest
 
         public ChestController GetChest(ChestData chestData)
         {
-            if (pooledChestsList.Count != 0)
+            slotData.FillSlot();
+            if (pooledChestsList.Count > 0)
             {
                 PooledChest pooledChest = pooledChestsList.Find(item => !item.isUsed && IsRequiredChest(chestData, item.controller));
                 if (pooledChest != null)
                 {
+                    SetPosition(pooledChest.controller);
+                    pooledChest.controller.Reset();
                     pooledChest.isUsed = true;
                     return pooledChest.controller;
                 }
             }
 
             return CreatePooledChest(chestData);
+        }
+
+        private void SetPosition(ChestController chestController)
+        {
+            chestController.SetPosition(slotData.transform);
         }
 
         private bool IsRequiredChest(ChestData data, ChestController controller)

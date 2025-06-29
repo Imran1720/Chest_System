@@ -26,8 +26,11 @@ namespace ChestSystem.Chest
         {
             chestPool.SetSlotData(slotData);
             ChestController controller = chestPool.GetChest(GetRandomChest());
-            chestControllersList.Add(controller);
-            Debug.Log(chestControllersList[0]);
+            if (chestControllersList.Find(item => item == controller) == null)
+            {
+                chestControllersList.Add(controller);
+            }
+            controller.SetViewActive();
         }
 
         public void Update()
@@ -41,11 +44,13 @@ namespace ChestSystem.Chest
         private ChestData GetRandomChest()
         {
             int randomChestIndex = Random.Range(0, chestSO.ChestTypeList.Length);
-            return chestSO.ChestTypeList[randomChestIndex];
+            return chestSO.ChestTypeList[0];
         }
 
         public bool CanUnlockChest() => isUnlockingChest;
 
         public void SetUnlockingChest(bool value) => isUnlockingChest = value;
+
+        public void ReturnChestToPool(ChestController controller) => chestPool.ReturnChest(controller);
     }
 }
