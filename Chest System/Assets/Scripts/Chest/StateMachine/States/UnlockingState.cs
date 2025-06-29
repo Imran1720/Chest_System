@@ -33,6 +33,7 @@ namespace ChestSystem.Chest
         public void Update()
         {
             timer -= Time.deltaTime;
+            Debug.Log((int)timer);
             if (CanUpdateCost())
             {
                 ChestController.UpdateCost(timer);

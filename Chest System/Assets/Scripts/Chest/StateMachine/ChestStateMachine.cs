@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace ChestSystem.Chest
 {
@@ -16,7 +16,10 @@ namespace ChestSystem.Chest
             CreateStates();
         }
 
-        public void Update() => currentState?.Update();
+        public void Update()
+        {
+            currentState?.Update();
+        }
 
         private void CreateStates()
         {

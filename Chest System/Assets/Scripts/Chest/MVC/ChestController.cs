@@ -17,6 +17,8 @@ namespace ChestSystem.Chest
             this.chestModel = chestModel;
             this.slotData = slotData;
 
+            this.slotData.FillSlot();
+
             this.chestView.SetChestController(this);
             CreateChestStateMachine();
             chestStateMachine.ChangeState(EChestState.LOCKED);
@@ -64,6 +66,8 @@ namespace ChestSystem.Chest
         {
             int elapsedTime = (int)timer / 60;
             int gemsRequired = (int)(Mathf.Ceil(elapsedTime / 10));
+            if (gemsRequired == 0)
+                gemsRequired = 1;
 
             return gemsRequired;
         }
@@ -114,5 +118,8 @@ namespace ChestSystem.Chest
 
         public void SetViewActive() => chestView.gameObject.SetActive(true);
         public void SetViewInactive() => chestView.gameObject.SetActive(false);
+
+        public void EmptyCurrentSlot() => slotData.EmptySlot();
+        public EChestType GetChestRarity() => chestModel.GetChesRarity();
     }
 }

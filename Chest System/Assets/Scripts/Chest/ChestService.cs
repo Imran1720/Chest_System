@@ -8,7 +8,6 @@ namespace ChestSystem.Chest
     {
         ChestSO chestSO;
         ChestView chestPrefab;
-        ChestController chestController;
         ChestPool chestPool;
 
         private bool isUnlockingChest = true;
@@ -20,15 +19,15 @@ namespace ChestSystem.Chest
             this.chestSO = chestSO;
             this.chestPrefab = chestPrefab;
 
-            chestPool = new ChestPool(chestPrefab, GetRandomChest());
+            chestPool = new ChestPool(chestPrefab);
         }
 
         public void CreateChest(SlotData slotData)
         {
             chestPool.SetSlotData(slotData);
-            ChestController controller = chestPool.GetChest();
-            chestControllersList.Add(chestController);
-            slotData.FillSlot();
+            ChestController controller = chestPool.GetChest(GetRandomChest());
+            chestControllersList.Add(controller);
+            Debug.Log(chestControllersList[0]);
         }
 
         public void Update()

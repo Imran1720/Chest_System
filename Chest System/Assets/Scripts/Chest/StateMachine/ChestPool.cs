@@ -12,19 +12,18 @@ namespace ChestSystem.Chest
 
         private List<PooledChest> pooledChestsList = new List<PooledChest>();
 
-        public ChestPool(ChestView chestPrefab, ChestData chestData)
+        public ChestPool(ChestView chestPrefab)
         {
             this.chestPrefab = chestPrefab;
-            this.chestData = chestData;
         }
 
         public void SetSlotData(SlotData slotData) => this.slotData = slotData;
 
-        public ChestController GetChest()
+        public ChestController GetChest(ChestData chestData)
         {
             if (pooledChestsList.Count != 0)
             {
-                PooledChest pooledChest = pooledChestsList.Find(item => !item.isUsed);
+                PooledChest pooledChest = pooledChestsList.Find(item => !item.isUsed && IsRequiredChest(chestData, item.controller));
                 if (pooledChest != null)
                 {
                     pooledChest.isUsed = true;
@@ -32,15 +31,20 @@ namespace ChestSystem.Chest
                 }
             }
 
-            return CreatePooledChest();
+            return CreatePooledChest(chestData);
         }
 
-        private ChestController CreatePooledChest()
+        private bool IsRequiredChest(ChestData data, ChestController controller)
+        {
+            return data.chestRarity == controller.GetChestRarity();
+        }
+
+        private ChestController CreatePooledChest(ChestData data)
         {
             PooledChest pooledChest = new PooledChest();
 
             ChestView view = CreateChestView();
-            ChestModel model = new ChestModel(chestData);
+            ChestModel model = new ChestModel(data);
             pooledChest.controller = CreateController(view, model);
             pooledChest.isUsed = true;
             pooledChestsList.Add(pooledChest);

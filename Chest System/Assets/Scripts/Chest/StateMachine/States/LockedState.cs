@@ -1,4 +1,5 @@
 
+using ChestSystem.UI;
 using UnityEngine;
 
 namespace ChestSystem.Chest
@@ -32,7 +33,8 @@ namespace ChestSystem.Chest
         public void OnClick()
         {
             // pop up to start timer or buy
-            chestStateMachine.ChangeState(EChestState.UNLOCKING);
+            if (UIService.Instance.GetChestService().CanUnlockChest())
+                chestStateMachine.ChangeState(EChestState.UNLOCKING);
         }
     }
 }
