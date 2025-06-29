@@ -111,5 +111,8 @@ namespace ChestSystem.Chest
         public void SetOpenedChestBG() => chestView.SetOpenedChestBG();
 
         public void SetLockedUI(bool value) => chestView.SetLockedUI(value);
+
+        public void SetViewActive() => chestView.gameObject.SetActive(true);
+        public void SetViewInactive() => chestView.gameObject.SetActive(false);
     }
 }

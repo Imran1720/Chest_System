@@ -9,6 +9,8 @@ namespace ChestSystem.Chest
         ChestSO chestSO;
         ChestView chestPrefab;
         ChestController chestController;
+        ChestPool chestPool;
+
         private bool isUnlockingChest = true;
 
         private List<ChestController> chestControllersList = new List<ChestController>();
@@ -17,17 +19,14 @@ namespace ChestSystem.Chest
         {
             this.chestSO = chestSO;
             this.chestPrefab = chestPrefab;
+
+            chestPool = new ChestPool(chestPrefab, GetRandomChest());
         }
 
         public void CreateChest(SlotData slotData)
         {
-            ChestView chestView = GameObject.Instantiate(chestPrefab, slotData.transform.position, Quaternion.identity);
-            chestView.transform.SetParent(slotData.transform, true);
-
-            ChestModel chestModel = new ChestModel(GetRandomChest());
-
-            chestController = new ChestController(chestView, chestModel, slotData);
-
+            chestPool.SetSlotData(slotData);
+            ChestController controller = chestPool.GetChest();
             chestControllersList.Add(chestController);
             slotData.FillSlot();
         }

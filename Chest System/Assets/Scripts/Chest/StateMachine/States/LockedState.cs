@@ -15,6 +15,7 @@ namespace ChestSystem.Chest
         }
         public void OnStateEntered()
         {
+            ChestController.SetViewActive();
             ChestController.SetLockedUI(true);
             ChestController.UpdateChestUI(EChestState.LOCKED);
         }

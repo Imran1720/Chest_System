@@ -33,12 +33,16 @@ namespace ChestSystem.Chest
         public void Update()
         {
             timer -= Time.deltaTime;
-            Debug.Log((int)timer);
             if (CanUpdateCost())
             {
                 ChestController.UpdateCost(timer);
             }
             ChestController.UpdateTime(timer);
+
+            if (timer <= 0)
+            {
+                chestStateMachine.ChangeState(EChestState.UNLOCKED);
+            }
         }
 
         private bool CanUpdateCost()
@@ -51,7 +55,6 @@ namespace ChestSystem.Chest
         public void OnClick()
         {
             // pop up to buy with gems
-            chestStateMachine.ChangeState(EChestState.UNLOCKED);
         }
     }
 }

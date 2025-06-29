@@ -13,6 +13,7 @@ namespace ChestSystem.Chest
         }
         public void OnClick()
         {
+            ChestController.SetViewInactive();
         }
 
         public void OnStateEntered()
