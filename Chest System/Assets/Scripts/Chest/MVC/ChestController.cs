@@ -63,7 +63,8 @@ namespace ChestSystem.Chest
 
         public void OnSelectingChest() => chestStateMachine.ProcessOnClick();
 
-        private void OpenWithGems() => chestStateMachine.ChangeState(EChestState.UNLOCKED);
+        public void OpenWithGems() => chestStateMachine.ChangeState(EChestState.UNLOCKED);
+        public void StartTimer() => chestStateMachine.ChangeState(EChestState.UNLOCKING);
 
         //public void SetChestUnlockingUI() => chestStateMachine.ChangeState(EChestState.UNLOCKING);
 
@@ -76,7 +77,7 @@ namespace ChestSystem.Chest
         public int CalculateChestBuyingCost(float timer)
         {
             int elapsedTime = (int)timer / 60;
-            int gemsRequired = (int)(Mathf.Ceil(elapsedTime / 10));
+            int gemsRequired = (int)(Mathf.Ceil((float)elapsedTime / 10));
             if (gemsRequired == 0)
                 gemsRequired = 1;
 
@@ -134,5 +135,8 @@ namespace ChestSystem.Chest
         public EChestType GetChestRarity() => chestModel.GetChesRarity();
 
         public void SetPosition(Transform parent) => chestView.transform.SetParent(parent, true);
+
+        public int GetChestBuyingCost() => chestStateMachine.GetChestBuyingCost();
+        public int GetDefaultBuyingCost() => CalculateChestBuyingCost(chestModel.GetOpenDuration() * 60);
     }
 }

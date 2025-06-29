@@ -1,3 +1,6 @@
+using ChestSystem.UI;
+using System.Diagnostics;
+
 namespace ChestSystem.Player
 {
     public class PlayerController
@@ -10,12 +13,14 @@ namespace ChestSystem.Player
         {
             int currentPlayerCoins = playerModel.GetCoinCount();
             playerModel.SetCoinCount(currentPlayerCoins + value);
+            UIService.Instance.UpdateCurrencies();
         }
 
         public void IncrementPlayerGemsBy(int value)
         {
             int currentPlayerGems = playerModel.GetGemCount();
             playerModel.SetGemCount(currentPlayerGems + value);
+            UIService.Instance.UpdateCurrencies();
         }
 
         public void DecrementPlayerCoinsBy(int value)
@@ -25,6 +30,7 @@ namespace ChestSystem.Player
             currentPlayerCoins = (currentPlayerCoins <= 0) ? 0 : currentPlayerCoins;
 
             playerModel.SetCoinCount(currentPlayerCoins);
+            UIService.Instance.UpdateCurrencies();
         }
 
         public void DecrementPlayerGemsBy(int value)
@@ -34,6 +40,7 @@ namespace ChestSystem.Player
             currentPlayerGems = (currentPlayerGems <= 0) ? 0 : currentPlayerGems;
 
             playerModel.SetGemCount(currentPlayerGems);
+            UIService.Instance.UpdateCurrencies();
         }
 
         public bool HasSufficientCoins(int amount) => playerModel.GetCoinCount() >= amount;
@@ -41,5 +48,11 @@ namespace ChestSystem.Player
 
         public int GetCoinCount() => playerModel.GetCoinCount();
         public int GetGemCount() => playerModel.GetGemCount();
+
+        public void RewardPlayer(int coins, int gems)
+        {
+            playerModel.AddCoins(coins);
+            playerModel.AddGems(gems);
+        }
     }
 }

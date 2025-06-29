@@ -21,5 +21,7 @@ namespace ChestSystem.Player
 
         public void DecrementCoinsBy(int value) => playerController.DecrementPlayerCoinsBy(value);
         public void DecrementGemsBy(int value) => playerController.DecrementPlayerGemsBy(value);
+
+        public void RewardPlayer(int coins, int gems) => playerController.RewardPlayer(coins, gems);
     }
 }

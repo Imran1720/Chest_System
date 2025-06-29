@@ -44,7 +44,7 @@ namespace ChestSystem.Chest
         private ChestData GetRandomChest()
         {
             int randomChestIndex = Random.Range(0, chestSO.ChestTypeList.Length);
-            return chestSO.ChestTypeList[0];
+            return chestSO.ChestTypeList[randomChestIndex];
         }
 
         public bool CanUnlockChest() => isUnlockingChest;

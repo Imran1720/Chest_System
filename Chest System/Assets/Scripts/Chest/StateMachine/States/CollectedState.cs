@@ -21,6 +21,8 @@ namespace ChestSystem.Chest
             ChestController.SetViewInactive();
             ChestController.EmptyCurrentSlot();
             UIService.Instance.GetChestService().ReturnChestToPool(ChestController);
+            UIService.Instance.GetPlayerService().RewardPlayer(ChestController.GetCoinsToBeRewarded(), ChestController.GetGemsToBeRewarded());
+            UIService.Instance.UpdateCurrencies();
         }
 
         public void OnStateExited()
@@ -29,6 +31,10 @@ namespace ChestSystem.Chest
 
         public void Update()
         {
+        }
+        public int GetChestBuyingCost()
+        {
+            return 0;
         }
     }
 }

@@ -34,7 +34,19 @@ namespace ChestSystem.Chest
         {
             // pop up to start timer or buy
             if (UIService.Instance.GetChestService().CanUnlockChest())
-                chestStateMachine.ChangeState(EChestState.UNLOCKING);
+            {
+                UIService.Instance.GetPopUpService().ShowUnlockPopUP(ChestController);
+            }
+            else
+            {
+                UIService.Instance.GetPopUpService().ShowChestOpeningPopUP();
+            }
+        }
+
+        public int GetChestBuyingCost()
+        {
+            return ChestController.GetDefaultBuyingCost();
         }
     }
 }
+

@@ -31,5 +31,9 @@ namespace ChestSystem.Chest
         public void Update()
         {
         }
+        public int GetChestBuyingCost()
+        {
+            return 0;
+        }
     }
 }
