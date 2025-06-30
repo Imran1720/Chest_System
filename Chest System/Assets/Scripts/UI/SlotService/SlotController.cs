@@ -39,8 +39,16 @@ namespace ChestSystem.UI.Slot
             slotList.Add(slot);
         }
 
-        public void EmptySlot(SlotData slotToBeEmptied) => slotToBeEmptied.EmptySlot();
-        public void FillSlot(SlotData slotToBeFilled) => slotToBeFilled.FillSlot();
+        public void EmptySlot(SlotData slotToBeEmptied)
+        {
+            SlotData slot = slotList.Find(item => item.Equals(slotToBeEmptied));
+            slot.EmptySlot();
+        }
+        public void FillSlot(SlotData slotToBeFilled)
+        {
+            SlotData slot = slotList.Find(item => item.Equals(slotToBeFilled));
+            slot.FillSlot();
+        }
 
         private int GetEmptySlotCount()
         {

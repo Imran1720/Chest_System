@@ -19,7 +19,6 @@ namespace ChestSystem.Chest
         public void OnStateEntered()
         {
             ChestController.SetViewInactive();
-            ChestController.EmptyCurrentSlot();
             UIService.Instance.GetChestService().ReturnChestToPool(ChestController);
             UIService.Instance.GetPlayerService().RewardPlayer(ChestController.GetCoinsToBeRewarded(), ChestController.GetGemsToBeRewarded());
             UIService.Instance.UpdateCurrencies();

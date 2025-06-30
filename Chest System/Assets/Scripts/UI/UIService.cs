@@ -109,5 +109,6 @@ namespace ChestSystem.UI
         public ChestService GetChestService() => chestService;
         public PopUpService GetPopUpService() => popUpService;
         public PlayerService GetPlayerService() => playerService;
+        public SlotService GetSlotService() => slotService;
     }
 }

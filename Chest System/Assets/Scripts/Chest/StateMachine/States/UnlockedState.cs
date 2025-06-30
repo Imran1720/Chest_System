@@ -25,7 +25,7 @@ namespace ChestSystem.Chest
 
         public void OnStateExited()
         {
-
+            ChestController.EmptyCurrentSlot();
         }
 
         public void Update()

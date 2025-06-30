@@ -1,3 +1,4 @@
+using ChestSystem.UI;
 using ChestSystem.UI.Slot;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,6 +31,8 @@ namespace ChestSystem.Chest
             {
                 chestControllersList.Add(controller);
             }
+            UIService.Instance.GetSlotService().FillSlot(slotData);
+
             controller.SetViewActive();
         }
 

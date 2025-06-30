@@ -21,13 +21,12 @@ namespace ChestSystem.Chest
 
         public ChestController GetChest(ChestData chestData)
         {
-            slotData.FillSlot();
             if (pooledChestsList.Count > 0)
             {
                 PooledChest pooledChest = pooledChestsList.Find(item => !item.isUsed && IsRequiredChest(chestData, item.controller));
                 if (pooledChest != null)
                 {
-                    SetPosition(pooledChest.controller);
+                    SetParent(pooledChest.controller);
                     pooledChest.controller.Reset();
                     pooledChest.isUsed = true;
                     return pooledChest.controller;
@@ -37,9 +36,9 @@ namespace ChestSystem.Chest
             return CreatePooledChest(chestData);
         }
 
-        private void SetPosition(ChestController chestController)
+        private void SetParent(ChestController chestController)
         {
-            chestController.SetPosition(slotData.transform);
+            chestController.ResetParent(slotData.transform);
         }
 
         private bool IsRequiredChest(ChestData data, ChestController controller)

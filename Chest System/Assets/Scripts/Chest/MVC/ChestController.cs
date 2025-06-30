@@ -1,3 +1,4 @@
+using ChestSystem.UI;
 using ChestSystem.UI.Slot;
 using UnityEngine;
 
@@ -16,8 +17,6 @@ namespace ChestSystem.Chest
             this.chestView = chestView;
             this.chestModel = chestModel;
             this.slotData = slotData;
-
-            this.slotData.FillSlot();
 
             this.chestView.SetChestController(this);
             CreateChestStateMachine();
@@ -131,10 +130,16 @@ namespace ChestSystem.Chest
         public void SetViewActive() => chestView.gameObject.SetActive(true);
         public void SetViewInactive() => chestView.gameObject.SetActive(false);
 
-        public void EmptyCurrentSlot() => slotData.EmptySlot();
+        public void EmptyCurrentSlot() => UIService.Instance.GetSlotService().EmptySlot(slotData);
+        //public void FillCurrentSlot() => UIService.Instance.GetSlotService().FillSlot(slotData);
         public EChestType GetChestRarity() => chestModel.GetChesRarity();
 
-        public void SetPosition(Transform parent) => chestView.transform.SetParent(parent, true);
+        public void ResetParent(Transform parent)
+        {
+            chestView.transform.parent = null;
+            chestView.transform.position = parent.position;
+            chestView.transform.SetParent(parent, true);
+        }
 
         public int GetChestBuyingCost() => chestStateMachine.GetChestBuyingCost();
         public int GetDefaultBuyingCost() => CalculateChestBuyingCost(chestModel.GetOpenDuration() * 60);
