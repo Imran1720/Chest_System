@@ -7,33 +7,45 @@ namespace ChestSystem.Chest
 {
     public class ChestService
     {
-        ChestSO chestSO;
-        ChestView chestPrefab;
-        ChestPool chestPool;
+        private ChestSO chestSO;
+        private ChestPool chestPool;
+        private ChestView chestPrefab;
+
+        private UIService uiService;
+        private SlotService slotService;
 
         private bool isUnlockingChest = true;
 
         private List<ChestController> chestControllersList = new List<ChestController>();
 
-        public ChestService(ChestSO chestSO, ChestView chestPrefab)
+        public ChestService(ChestSO chestSO, ChestView chestPrefab, UIService uiService)
         {
             this.chestSO = chestSO;
+            this.uiService = uiService;
             this.chestPrefab = chestPrefab;
 
             chestPool = new ChestPool(chestPrefab);
+            slotService = uiService.GetSlotService();
         }
 
         public void CreateChest(SlotData slotData)
         {
             chestPool.SetSlotData(slotData);
+
             ChestController controller = chestPool.GetChest(GetRandomChest());
-            if (chestControllersList.Find(item => item == controller) == null)
+            if (!IsSimilarTypeOfControllerAvailable(controller))
             {
                 chestControllersList.Add(controller);
             }
-            UIService.Instance.GetSlotService().FillSlot(slotData);
 
+            slotService.FillSlot(slotData);
             controller.SetViewActive();
+        }
+
+        private bool IsSimilarTypeOfControllerAvailable(ChestController controller)
+        {
+            ChestController chestController = chestControllersList.Find(item => item == controller);
+            return chestController != null;
         }
 
         public void Update()
@@ -44,16 +56,10 @@ namespace ChestSystem.Chest
             }
         }
 
-        private ChestData GetRandomChest()
-        {
-            int randomChestIndex = Random.Range(0, chestSO.ChestTypeList.Length);
-            return chestSO.ChestTypeList[randomChestIndex];
-        }
-
         public bool CanUnlockChest() => isUnlockingChest;
-
         public void SetUnlockingChest(bool value) => isUnlockingChest = value;
-
+        private ChestData GetRandomChest() => chestSO.ChestTypeList[GetRandomIndex()];
+        private int GetRandomIndex() => Random.Range(0, chestSO.ChestTypeList.Length);
         public void ReturnChestToPool(ChestController controller) => chestPool.ReturnChest(controller);
     }
 }
