@@ -1,3 +1,4 @@
+using ChestSystem.Core;
 using ChestSystem.UI;
 using UnityEngine;
 
@@ -20,9 +21,9 @@ namespace ChestSystem.Chest
         {
             ChestController.SetViewInactive();
             ChestController.EmptyCurrentSlot();
-            UIService.Instance.GetChestService().ReturnChestToPool(ChestController);
-            UIService.Instance.GetPlayerService().RewardPlayer(ChestController.GetCoinsToBeRewarded(), ChestController.GetGemsToBeRewarded());
-            UIService.Instance.UpdateCurrencies();
+            ChestController.ReturnChestToPool();
+            GameService.Instance.GetPlayerService().RewardPlayer(ChestController.GetCoinsToBeRewarded(), ChestController.GetGemsToBeRewarded());
+            GameService.Instance.GetUIService().UpdateCurrencies();
         }
 
         public void OnStateExited()

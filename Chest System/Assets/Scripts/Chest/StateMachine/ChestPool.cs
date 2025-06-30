@@ -57,7 +57,6 @@ namespace ChestSystem.Chest
             ChestView view = CreateChestView();
             ChestModel model = new ChestModel(data);
             pooledChest.controller = CreateController(view, model);
-            pooledChest.controller.InitializeServices(uiService);
             pooledChest.isUsed = true;
             pooledChestsList.Add(pooledChest);
 

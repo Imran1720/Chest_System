@@ -11,8 +11,7 @@ namespace ChestSystem.Chest
         public ChestController ChestController { get; set; }
         private ChestStateMachine chestStateMachine;
 
-        private ChestService chestService;
-        private PopUpService popUpService;
+        ChestService chestService;
 
         private float timer;
         private int costUpdateThreshold = 10;
@@ -20,21 +19,19 @@ namespace ChestSystem.Chest
         {
             this.chestStateMachine = chestStateMachine;
             ChestController = chestController;
-
             chestService = GameService.Instance.GetChestService();
-            popUpService = GameService.Instance.GetPopUpService();
         }
 
         public void OnStateEntered()
         {
-            chestService.SetUnlockingChest(false);
+            chestService.SetIsChestUnlocking(true);
             ChestController.SetLockedUI(true);
             timer = ChestController.GetChestOpenDuration() * 60;
         }
 
         public void OnStateExited()
         {
-            chestService.SetUnlockingChest(true);
+            chestService.SetIsChestUnlocking(false);
         }
 
         public void Update()
@@ -61,7 +58,7 @@ namespace ChestSystem.Chest
 
         public void OnClick()
         {
-            popUpService.ShowBuyPopUP(ChestController);
+            ChestController.ShowBuyPopUP();
         }
 
         public int GetChestBuyingCost()

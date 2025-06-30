@@ -40,6 +40,15 @@ namespace ChestSystem.Chest
 
         private IState GetState(EChestState state) => chestStatesList[state];
 
+        public EChestState GetCurrentStateType()
+        {
+            foreach (var item in chestStatesList)
+            {
+                if (item.Value == currentState)
+                    return item.Key;
+            }
+            return EChestState.LOCKED;
+        }
         public int GetChestBuyingCost()
         {
             return currentState.GetChestBuyingCost();

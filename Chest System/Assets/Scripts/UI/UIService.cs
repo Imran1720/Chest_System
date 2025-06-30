@@ -43,10 +43,10 @@ namespace ChestSystem.UI
             generateChestButton.onClick.AddListener(GenerateChest);
         }
 
-        public void InitializeSevices(PlayerService playerService, ChestService chestService)
+        public void InitializeSevices(GameService gameService)
         {
-            this.chestService = chestService;
-            this.playerService = playerService;
+            chestService = gameService.GetChestService();
+            playerService = gameService.GetPlayerService();
 
             popUpService = Instantiate(popUpServicePrefab);
             popUpService.transform.SetParent(transform, false);

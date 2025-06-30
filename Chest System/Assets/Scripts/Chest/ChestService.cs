@@ -1,3 +1,4 @@
+using ChestSystem.Core;
 using ChestSystem.UI;
 using ChestSystem.UI.Slot;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace ChestSystem.Chest
         private UIService uiService;
         private SlotService slotService;
 
-        private bool isUnlockingChest = true;
+        private bool isUnlockingChest = false;
 
         private List<ChestController> chestControllersList = new List<ChestController>();
 
@@ -26,9 +27,9 @@ namespace ChestSystem.Chest
             chestPool = new ChestPool(chestPrefab, uiService);
         }
 
-        public void InitializeSevices(UIService uiService)
+        public void InitializeSevices(GameService gameService)
         {
-            this.uiService = uiService;
+            uiService = gameService.GetUIService();
             slotService = uiService.GetSlotService();
         }
 
@@ -60,8 +61,8 @@ namespace ChestSystem.Chest
             }
         }
 
-        public bool CanUnlockChest() => isUnlockingChest;
-        public void SetUnlockingChest(bool value) => isUnlockingChest = value;
+        public bool CanUnlockChest() => !isUnlockingChest;
+        public void SetIsChestUnlocking(bool value) => isUnlockingChest = value;
         private ChestData GetRandomChest() => chestSO.ChestTypeList[GetRandomIndex()];
         private int GetRandomIndex() => Random.Range(0, chestSO.ChestTypeList.Length);
         public void ReturnChestToPool(ChestController controller) => chestPool.ReturnChest(controller);
