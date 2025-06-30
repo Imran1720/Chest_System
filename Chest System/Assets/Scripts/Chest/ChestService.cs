@@ -18,13 +18,17 @@ namespace ChestSystem.Chest
 
         private List<ChestController> chestControllersList = new List<ChestController>();
 
-        public ChestService(ChestSO chestSO, ChestView chestPrefab, UIService uiService)
+        public ChestService(ChestSO chestSO, ChestView chestPrefab)
         {
             this.chestSO = chestSO;
-            this.uiService = uiService;
             this.chestPrefab = chestPrefab;
 
-            chestPool = new ChestPool(chestPrefab);
+            chestPool = new ChestPool(chestPrefab, uiService);
+        }
+
+        public void InitializeSevices(UIService uiService)
+        {
+            this.uiService = uiService;
             slotService = uiService.GetSlotService();
         }
 

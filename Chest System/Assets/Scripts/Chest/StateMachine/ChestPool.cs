@@ -1,3 +1,4 @@
+using ChestSystem.UI;
 using ChestSystem.UI.Slot;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,11 +11,14 @@ namespace ChestSystem.Chest
         private ChestData chestData;
         private SlotData slotData;
 
+        private UIService uiService;
+
         private List<PooledChest> pooledChestsList = new List<PooledChest>();
 
-        public ChestPool(ChestView chestPrefab)
+        public ChestPool(ChestView chestPrefab, UIService uiService)
         {
             this.chestPrefab = chestPrefab;
+            this.uiService = uiService;
         }
 
         public void SetSlotData(SlotData slotData) => this.slotData = slotData;
@@ -53,6 +57,7 @@ namespace ChestSystem.Chest
             ChestView view = CreateChestView();
             ChestModel model = new ChestModel(data);
             pooledChest.controller = CreateController(view, model);
+            pooledChest.controller.InitializeServices(uiService);
             pooledChest.isUsed = true;
             pooledChestsList.Add(pooledChest);
 

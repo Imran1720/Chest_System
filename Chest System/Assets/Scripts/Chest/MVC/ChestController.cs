@@ -12,6 +12,9 @@ namespace ChestSystem.Chest
 
         private ChestStateMachine chestStateMachine;
 
+        private UIService uiService;
+        private SlotService slotService;
+
         public ChestController(ChestView chestView, ChestModel chestModel, SlotData slotData)
         {
             this.chestView = chestView;
@@ -24,10 +27,16 @@ namespace ChestSystem.Chest
             CalculateReward();
         }
 
+        public void InitializeServices(UIService uiService)
+        {
+            this.uiService = uiService;
+            slotService = uiService.GetSlotService();
+        }
+
         public void Reset()
         {
             chestView.Reset();
-            UIService.Instance.GetSlotService().FillSlot(slotData);
+            slotService.FillSlot(slotData);
             ChangeToDefaultState();
         }
 
@@ -131,8 +140,7 @@ namespace ChestSystem.Chest
         public void SetViewActive() => chestView.gameObject.SetActive(true);
         public void SetViewInactive() => chestView.gameObject.SetActive(false);
 
-        public void EmptyCurrentSlot() => UIService.Instance.GetSlotService().EmptySlot(slotData);
-        //public void FillCurrentSlot() => UIService.Instance.GetSlotService().FillSlot(slotData);
+        public void EmptyCurrentSlot() => slotService.EmptySlot(slotData);
         public EChestType GetChestRarity() => chestModel.GetChesRarity();
 
         public void ResetParent(Transform parent)

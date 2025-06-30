@@ -43,11 +43,12 @@ namespace ChestSystem.Core
 
         private void InitializeSevices()
         {
-            playerService = new PlayerService(3, 3);
+            playerService = new PlayerService(3, 3, UIService);
             chestService = new ChestService(chestSO, chestPrefab);
             soundService = new SoundService(audioSourceBGM, audioSourceSFX, soundClips);
 
             UIService.InitializeSevices(playerService, chestService);
+            chestService.InitializeSevices(UIService);
         }
 
         private void Update() => chestService.Update();

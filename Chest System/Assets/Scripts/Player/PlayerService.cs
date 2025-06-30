@@ -1,13 +1,14 @@
+using ChestSystem.UI;
 using UnityEngine;
 namespace ChestSystem.Player
 {
     public class PlayerService
     {
         PlayerController playerController;
-        public PlayerService(int initialCoinCount, int initalGemCount)
+        public PlayerService(int initialCoinCount, int initalGemCount, UIService uiService)
         {
             PlayerModel playerModel = new PlayerModel(initialCoinCount, initalGemCount);
-            playerController = new PlayerController(playerModel);
+            playerController = new PlayerController(playerModel, uiService);
         }
 
         public bool HasSufficientCoins(int value) => playerController.HasSufficientCoins(value);
