@@ -2247,6 +2247,7 @@ MonoBehaviour:
   chestSO: {fileID: 11400000, guid: 3633cf96be6abd64cbb69eb3185f35d7, type: 2}
   chestPrefab: {fileID: -8024142794937928516, guid: c9331b9257eb12a4cbb993f32d90b130, type: 3}
   generateChestButton: {fileID: 1541393648}
+  undoButton: {fileID: 1248534339}
 --- !u!1 &2064705067
 GameObject:
   m_ObjectHideFlags: 0

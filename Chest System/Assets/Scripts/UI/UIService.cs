@@ -35,7 +35,8 @@ namespace ChestSystem.UI
         [SerializeField] ChestView chestPrefab;
         [SerializeField] private Button generateChestButton;
 
-
+        [SerializeField] private Button undoButton;
+        private CommandInvoker commandInvoker;
         private void Awake()
         {
             Instance = this;
@@ -53,6 +54,7 @@ namespace ChestSystem.UI
         {
             addSlotButton.onClick.AddListener(AddSlot);
             generateChestButton.onClick.AddListener(GenerateChest);
+            undoButton.onClick.AddListener(UndoPurchase);
         }
 
         private void InitializeSevices()
@@ -62,6 +64,9 @@ namespace ChestSystem.UI
             chestService = new ChestService(chestSO, chestPrefab);
             popUpService = Instantiate(popUpServicePrefab);
             popUpService.transform.SetParent(transform, false);
+            commandInvoker = new CommandInvoker();
+
+            popUpService.SetCommandInvoker(commandInvoker);
         }
 
         public void UpdateCurrencies()
@@ -70,6 +75,7 @@ namespace ChestSystem.UI
             UpdateGemCount();
         }
 
+        public void ClearCommandHistory() => commandInvoker.ClearHistory();
 
         private void Update()
         {
@@ -105,6 +111,8 @@ namespace ChestSystem.UI
 
             chestService.CreateChest(slotData);
         }
+
+        private void UndoPurchase() => commandInvoker.UndoCommand();
 
         public ChestService GetChestService() => chestService;
         public PopUpService GetPopUpService() => popUpService;
