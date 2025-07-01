@@ -1,4 +1,5 @@
 using ChestSystem.Chest;
+using ChestSystem.Events;
 using ChestSystem.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,32 +24,20 @@ public class ChestView : MonoBehaviour, IPointerDownHandler
     [SerializeField] private Color openBGColor;
     private Color defaultBGColor;
 
+    private EventService eventService;
 
-    private ChestController chestController;
-
-    private void Start()
-    {
-        defaultBGColor = background.color;
-    }
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        chestController.OnSelectingChest();
-    }
-
+    private void Start() => defaultBGColor = background.color;
+    public void SetServices(EventService eventService) => this.eventService = eventService;
+    public void OnPointerDown(PointerEventData eventData) => eventService.OnChestSelected.InvokeEvent(this);
     public void SetState(EChestState state) => chestStateText.text = GetChestStateText(state);
     public void SetTimer(int hour, int minute)
     {
         OpenDurationText.text = "";
-        //if (hour > 0)
-        //{
-        //    OpenDurationText.text += hour + "H ";
-        //}
         OpenDurationText.text += minute + "M";
     }
 
-    public void SetOpeningCost(int cost) => openingCostText.text = cost.ToString();
-
     public void SetChestIcon(Sprite icon) => chestIcon.sprite = icon;
+    public void SetOpeningCost(int cost) => openingCostText.text = cost.ToString();
 
     public string GetChestStateText(EChestState state)
     {
@@ -65,18 +54,14 @@ public class ChestView : MonoBehaviour, IPointerDownHandler
         }
     }
 
-    public void SetLockedUI(bool value)
+    public void SetLockedUI(bool value, EChestState chestState)
     {
-        SetState(chestController.GetCurrentChestState());
+        SetState(chestState);
         lockedStateUI.SetActive(value);
         payUI.SetActive(value);
         OpenUI.SetActive(!value);
     }
 
+    public void Reset() => background.color = defaultBGColor;
     public void SetOpenedChestBG() => background.color = openBGColor;
-    public void SetChestController(ChestController chestController) => this.chestController = chestController;
-    public void Reset()
-    {
-        background.color = defaultBGColor;
-    }
 }

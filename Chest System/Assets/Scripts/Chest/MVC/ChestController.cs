@@ -1,4 +1,5 @@
 using ChestSystem.Core;
+using ChestSystem.Events;
 using ChestSystem.UI;
 using ChestSystem.UI.PopUp;
 using ChestSystem.UI.Slot;
@@ -17,6 +18,7 @@ namespace ChestSystem.Chest
         private UIService uiService;
         private SlotService slotService;
         private PopUpService popUpService;
+        private EventService eventService;
 
         public ChestController(ChestView chestView, ChestModel chestModel, SlotData slotData)
         {
@@ -24,10 +26,20 @@ namespace ChestSystem.Chest
             this.chestModel = chestModel;
             this.slotData = slotData;
             InitializeServices();
-            this.chestView.SetChestController(this);
             CreateChestStateMachine();
             Reset();
             CalculateReward();
+            AddListeners();
+        }
+
+        private void AddListeners()
+        {
+            eventService.OnChestSelected.AddListener(OnChestSelected);
+        }
+
+        ~ChestController()
+        {
+            eventService.OnChestSelected.RemoveListener(OnChestSelected);
         }
 
         public void InitializeServices()
@@ -35,6 +47,7 @@ namespace ChestSystem.Chest
             uiService = GameService.Instance.GetUIService();
             slotService = uiService.GetSlotService();
             popUpService = uiService.GetPopUpService();
+            eventService = GameService.Instance.GetEventService();
         }
 
         public void Reset()
@@ -74,7 +87,13 @@ namespace ChestSystem.Chest
 
         private void CreateChestStateMachine() => chestStateMachine = new ChestStateMachine(this);
 
-        public void OnSelectingChest() => chestStateMachine.ProcessOnClick();
+        public void OnChestSelected(ChestView view)
+        {
+            if (view.Equals(chestView))
+            {
+                chestStateMachine.ProcessOnClick();
+            }
+        }
 
         public void OpenWithGems() => chestStateMachine.ChangeState(EChestState.UNLOCKED);
         public void StartTimer() => chestStateMachine.ChangeState(EChestState.UNLOCKING);
@@ -137,7 +156,7 @@ namespace ChestSystem.Chest
 
         public void SetOpenedChestBG() => chestView.SetOpenedChestBG();
 
-        public void SetLockedUI(bool value) => chestView.SetLockedUI(value);
+        public void SetLockedUI(bool value) => chestView.SetLockedUI(value, GetCurrentChestState());
 
         public void SetViewActive() => chestView.gameObject.SetActive(true);
         public void SetViewInactive() => chestView.gameObject.SetActive(false);

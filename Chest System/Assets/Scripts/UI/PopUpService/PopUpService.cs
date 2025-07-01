@@ -45,6 +45,7 @@ namespace ChestSystem.UI.PopUp
         private void HidePopUp() => popUpObject.SetActive(false);
         private void ShowPopUp()
         {
+            ClosePopUp();
             backgroundImage.enabled = true;
             popUpObject.SetActive(true);
             closePopUpButton.gameObject.SetActive(true);
@@ -70,7 +71,6 @@ namespace ChestSystem.UI.PopUp
 
         public void ShowSlotsFullPopUP()
         {
-            ClosePopUp();
             ShowPopUp();
             string warning = "Chest Slots Full!!";
             warningMessageText.text = warning;
@@ -79,7 +79,6 @@ namespace ChestSystem.UI.PopUp
 
         public void ShowChestOpeningPopUP()
         {
-            ClosePopUp();
             ShowPopUp();
             string warning = "Already chest is opening!!";
             warningMessageText.text = warning;
@@ -88,8 +87,6 @@ namespace ChestSystem.UI.PopUp
 
         public void ShowInsufficientFundPopUP()
         {
-            ClosePopUp();
-
             ShowPopUp();
             string warning = "Insufficient Funds!!";
             warningMessageText.text = warning;

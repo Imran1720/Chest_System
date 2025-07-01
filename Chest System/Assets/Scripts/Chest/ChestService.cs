@@ -1,4 +1,5 @@
 using ChestSystem.Core;
+using ChestSystem.Events;
 using ChestSystem.UI;
 using ChestSystem.UI.Slot;
 using System.Collections.Generic;
@@ -19,12 +20,12 @@ namespace ChestSystem.Chest
 
         private List<ChestController> chestControllersList = new List<ChestController>();
 
-        public ChestService(ChestSO chestSO, ChestView chestPrefab)
+        public ChestService(ChestSO chestSO, ChestView chestPrefab, EventService eventService)
         {
             this.chestSO = chestSO;
             this.chestPrefab = chestPrefab;
 
-            chestPool = new ChestPool(chestPrefab, uiService);
+            chestPool = new ChestPool(chestPrefab, uiService, eventService);
         }
 
         public void InitializeSevices(GameService gameService)

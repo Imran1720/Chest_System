@@ -1,4 +1,5 @@
 using ChestSystem.Chest;
+using ChestSystem.Events;
 using ChestSystem.Player;
 using ChestSystem.Sound;
 using ChestSystem.UI;
@@ -15,6 +16,7 @@ namespace ChestSystem.Core
         private SoundService soundService;
         private ChestService chestService;
         private PlayerService playerService;
+        private EventService eventService;
         [SerializeField] private UIService UIService;
 
         private CommandInvoker commandInvoker;
@@ -43,8 +45,9 @@ namespace ChestSystem.Core
 
         private void InitializeSevices()
         {
+            eventService = new EventService();
             playerService = new PlayerService(3, 3, UIService);
-            chestService = new ChestService(chestSO, chestPrefab);
+            chestService = new ChestService(chestSO, chestPrefab, eventService);
             soundService = new SoundService(audioSourceBGM, audioSourceSFX, soundClips);
 
             UIService.InitializeSevices(this);
@@ -61,5 +64,6 @@ namespace ChestSystem.Core
         public PlayerService GetPlayerService() => playerService;
         public SlotService GetSlotService() => UIService.GetSlotService();
         public PopUpService GetPopUpService() => UIService.GetPopUpService();
+        public EventService GetEventService() => eventService;
     }
 }

@@ -1,3 +1,4 @@
+using ChestSystem.Events;
 using ChestSystem.UI;
 using ChestSystem.UI.Slot;
 using System.Collections.Generic;
@@ -12,13 +13,14 @@ namespace ChestSystem.Chest
         private SlotData slotData;
 
         private UIService uiService;
-
+        private EventService eventService;
         private List<PooledChest> pooledChestsList = new List<PooledChest>();
 
-        public ChestPool(ChestView chestPrefab, UIService uiService)
+        public ChestPool(ChestView chestPrefab, UIService uiService, EventService eventService)
         {
             this.chestPrefab = chestPrefab;
             this.uiService = uiService;
+            this.eventService = eventService;
         }
 
         public void SetSlotData(SlotData slotData) => this.slotData = slotData;
@@ -69,7 +71,7 @@ namespace ChestSystem.Chest
         {
             ChestView chestView = GameObject.Instantiate(chestPrefab, slotData.transform.position, Quaternion.identity);
             chestView.transform.SetParent(slotData.transform, true);
-
+            chestView.SetServices(eventService);
             return chestView;
         }
 
