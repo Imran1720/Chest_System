@@ -36,7 +36,10 @@ namespace ChestSystem.UI
         [SerializeField] private Button addSlotButton;
         [SerializeField] private Button generateChestButton;
 
-        private void Start() => InitializeButtonListeners();
+        private void Start()
+        {
+            InitializeButtonListeners();
+        }
 
         private void InitializeButtonListeners()
         {
@@ -44,6 +47,8 @@ namespace ChestSystem.UI
             undoButton.onClick.AddListener(UndoPurchase);
             generateChestButton.onClick.AddListener(GenerateChest);
         }
+
+        public void CreateSlotService(EventService eventService) => slotService = new SlotService(slotPrefab, slotContainer, initialSlotCount, eventService);
 
         public void InitializeSevices(GameService gameService)
         {
@@ -53,8 +58,8 @@ namespace ChestSystem.UI
 
             popUpService = Instantiate(popUpServicePrefab);
             popUpService.transform.SetParent(transform, false);
-            slotService = new SlotService(slotPrefab, slotContainer, initialSlotCount);
             popUpService.InitializeServices(gameService);
+
 
             AddEventListeners();
             UpdateCurrencies();
@@ -78,7 +83,7 @@ namespace ChestSystem.UI
         }
 
         private void AddSlot() => slotService.AddEmptySlot();
-        private void UndoPurchase() => GameService.Instance.UndoCommand();
+        private void UndoPurchase() => eventService.OnUndoClicked.InvokeEvent();
         private void UpdateGemCount() => gemCountText.text = playerService.GetGemCount().ToString();
         private void UpdateCoinCount() => coinCountText.text = playerService.GetCoinCount().ToString();
 

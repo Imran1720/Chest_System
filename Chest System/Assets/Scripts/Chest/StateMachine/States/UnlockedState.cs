@@ -14,10 +14,7 @@ namespace ChestSystem.Chest
             ChestController = chestController;
         }
 
-        public void OnClick()
-        {
-            chestStateMachine.ChangeState(EChestState.COLLECTED);
-        }
+        public void OnClick() => chestStateMachine.ChangeState(EChestState.COLLECTED);
 
         public void OnStateEntered()
         {
@@ -26,13 +23,7 @@ namespace ChestSystem.Chest
         }
 
         public void OnStateExited() { }
-
-        public void Update()
-        {
-        }
-        public int GetChestBuyingCost()
-        {
-            return 0;
-        }
+        public void Update() { }
+        public int GetChestBuyingCost() => 0;
     }
 }

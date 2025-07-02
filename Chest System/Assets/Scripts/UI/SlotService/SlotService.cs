@@ -1,3 +1,4 @@
+using ChestSystem.Events;
 using UnityEngine;
 
 namespace ChestSystem.UI.Slot
@@ -5,9 +6,9 @@ namespace ChestSystem.UI.Slot
     public class SlotService
     {
         private SlotController slotController;
-        public SlotService(SlotData slotPrefab, GameObject container, int initialSlotCount)
+        public SlotService(SlotData slotPrefab, GameObject container, int initialSlotCount, EventService eventService)
         {
-            slotController = new SlotController(slotPrefab, container, initialSlotCount);
+            slotController = new SlotController(slotPrefab, container, initialSlotCount, eventService);
         }
 
         public bool IsEmptySlotAvailable() => slotController.IsEmptySlotAvailable();

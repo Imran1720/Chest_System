@@ -1,37 +1,27 @@
 using ChestSystem.Core;
-using ChestSystem.UI;
-using UnityEngine;
+using ChestSystem.Events;
 
 namespace ChestSystem.Chest
 {
     public class CollectedState : IState
     {
-        public ChestController ChestController { get; set; }
         public ChestStateMachine chestStateMachine;
-        public CollectedState(ChestStateMachine chestStateMachine, ChestController chestController)
+        public ChestController ChestController { get; set; }
+        private EventService eventService;
+
+        public CollectedState(ChestStateMachine chestStateMachine, ChestController chestController, GameService gameService)
         {
             this.chestStateMachine = chestStateMachine;
             ChestController = chestController;
-        }
-        public void OnClick()
-        {
+
+            eventService = gameService.GetEventService();
         }
 
-        public void OnStateEntered()
-        {
-            GameService.Instance.GetEventService().OnRewardCollected.InvokeEvent(ChestController);
-        }
+        public int GetChestBuyingCost() => 0;
+        public void OnStateEntered() => eventService.OnRewardCollected.InvokeEvent(ChestController);
 
-        public void OnStateExited()
-        {
-        }
-
-        public void Update()
-        {
-        }
-        public int GetChestBuyingCost()
-        {
-            return 0;
-        }
+        public void Update() { }
+        public void OnClick() { }
+        public void OnStateExited() { }
     }
 }

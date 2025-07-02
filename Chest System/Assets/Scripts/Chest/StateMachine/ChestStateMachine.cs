@@ -1,3 +1,4 @@
+using ChestSystem.Core;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,23 +11,20 @@ namespace ChestSystem.Chest
         private Dictionary<EChestState, IState> chestStatesList = new Dictionary<EChestState, IState>();
         public IState currentState;
 
-        public ChestStateMachine(ChestController controller)
+        public ChestStateMachine(ChestController controller, GameService gameService)
         {
             this.controller = controller;
-            CreateStates();
+            CreateStates(gameService);
         }
 
-        public void Update()
-        {
-            currentState?.Update();
-        }
+        public void Update() => currentState?.Update();
 
-        private void CreateStates()
+        private void CreateStates(GameService gameService)
         {
-            chestStatesList.Add(EChestState.LOCKED, new LockedState(this, controller));
-            chestStatesList.Add(EChestState.UNLOCKING, new UnlockingState(this, controller));
+            chestStatesList.Add(EChestState.LOCKED, new LockedState(this, controller, gameService));
+            chestStatesList.Add(EChestState.UNLOCKING, new UnlockingState(this, controller, gameService));
             chestStatesList.Add(EChestState.UNLOCKED, new UnlockedState(this, controller));
-            chestStatesList.Add(EChestState.COLLECTED, new CollectedState(this, controller));
+            chestStatesList.Add(EChestState.COLLECTED, new CollectedState(this, controller, gameService));
         }
 
         public void ChangeState(EChestState state)
@@ -37,7 +35,6 @@ namespace ChestSystem.Chest
         }
 
         public void ProcessOnClick() => currentState.OnClick();
-
         private IState GetState(EChestState state) => chestStatesList[state];
 
         public EChestState GetCurrentStateType()
@@ -49,9 +46,6 @@ namespace ChestSystem.Chest
             }
             return EChestState.LOCKED;
         }
-        public int GetChestBuyingCost()
-        {
-            return currentState.GetChestBuyingCost();
-        }
+        public int GetChestBuyingCost() => currentState.GetChestBuyingCost();
     }
 }

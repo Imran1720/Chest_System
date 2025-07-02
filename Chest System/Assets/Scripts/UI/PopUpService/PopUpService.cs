@@ -45,11 +45,15 @@ namespace ChestSystem.UI.PopUp
         {
             eventService.OnInsufficientFunds.AddListener(OnInsufficientFunds);
             eventService.OnChestBought.AddListener(OnChestBought);
+            eventService.OnLockedChestClicked.AddListener(OnLockedChestedClicked);
+            eventService.OnUnlockingChestClicked.AddListener(OnUnlockingChestClicked);
         }
         private void OnDisable()
         {
             eventService.OnInsufficientFunds.RemoveListener(OnInsufficientFunds);
             eventService.OnChestBought.RemoveListener(OnChestBought);
+            eventService.OnLockedChestClicked.RemoveListener(OnLockedChestedClicked);
+            eventService.OnUnlockingChestClicked.RemoveListener(OnUnlockingChestClicked);
         }
 
         public void SetCommandInvoker(CommandInvoker commandInvoker) => this.commandInvoker = commandInvoker;
@@ -138,5 +142,18 @@ namespace ChestSystem.UI.PopUp
 
         private void OnInsufficientFunds() => ShowInsufficientFundPopUP();
         private void OnChestBought(ChestController controller) => ClosePopUp();
+
+        private void OnLockedChestedClicked(ChestController controller)
+        {
+            if (controller.CanUnlockChest())
+            {
+                ShowUnlockPopUP(controller);
+            }
+            else
+            {
+                ShowChestOpeningPopUP();
+            }
+        }
+        private void OnUnlockingChestClicked(ChestController controller) => ShowBuyPopUP(controller);
     }
 }

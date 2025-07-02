@@ -13,10 +13,10 @@ namespace ChestSystem.Core
     {
         public static GameService Instance;
 
+        private EventService eventService;
         private SoundService soundService;
         private ChestService chestService;
         private PlayerService playerService;
-        private EventService eventService;
         [SerializeField] private UIService UIService;
 
         private CommandInvoker commandInvoker;
@@ -39,32 +39,34 @@ namespace ChestSystem.Core
 
         private void InitializeData()
         {
-            commandInvoker = new CommandInvoker();
+            commandInvoker = new CommandInvoker(eventService);
             GetPopUpService().SetCommandInvoker(commandInvoker);
         }
 
         private void InitializeSevices()
         {
             eventService = new EventService();
-            playerService = new PlayerService(3, 3, UIService);
-            chestService = new ChestService(chestSO, chestPrefab, eventService);
+            UIService.CreateSlotService(eventService);
+            playerService = new PlayerService(3, 3, eventService);
+            chestService = new ChestService(chestSO, chestPrefab, this);
             soundService = new SoundService(audioSourceBGM, audioSourceSFX, soundClips);
 
             UIService.InitializeSevices(this);
-            chestService.InitializeSevices(this);
-
         }
 
         private void Update() => chestService.Update();
-        public void UndoCommand() => commandInvoker.UndoCommand();
-        public void ClearCommandHistory() => commandInvoker.ClearHistory();
 
+        public bool CanUnlockChest() => chestService.CanUnlockChest();
+        public void SetIsChestUnlocking(bool value) => chestService.SetIsChestUnlocking(value);
+
+        //Service Getters
         public UIService GetUIService() => UIService;
         public SoundService GetSoundService() => soundService;
         public ChestService GetChestService() => chestService;
+        public EventService GetEventService() => eventService;
         public PlayerService GetPlayerService() => playerService;
         public SlotService GetSlotService() => UIService.GetSlotService();
         public PopUpService GetPopUpService() => UIService.GetPopUpService();
-        public EventService GetEventService() => eventService;
+
     }
 }

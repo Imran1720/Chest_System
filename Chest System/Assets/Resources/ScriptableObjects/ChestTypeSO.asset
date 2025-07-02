@@ -19,25 +19,33 @@ MonoBehaviour:
     maxGemsRewarded: 120
     openDurationInMinutes: 15
     chestRarity: 0
-    chestIcon: {fileID: 21300000, guid: 45e0e7716f2b3a44bb2c28c15c52588e, type: 3}
+    chestLockedIcon: {fileID: 21300000, guid: 45e0e7716f2b3a44bb2c28c15c52588e, type: 3}
+    chestUnlockingIcon: {fileID: 0}
+    chestUnlockedIcon: {fileID: 0}
   - minCoinsRewarded: 300
     maxCoinsRewarded: 500
     minGemsRewarded: 20
     maxGemsRewarded: 40
     openDurationInMinutes: 30
     chestRarity: 1
-    chestIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+    chestLockedIcon: {fileID: 21300000, guid: 45e0e7716f2b3a44bb2c28c15c52588e, type: 3}
+    chestUnlockingIcon: {fileID: 0}
+    chestUnlockedIcon: {fileID: 0}
   - minCoinsRewarded: 600
     maxCoinsRewarded: 800
     minGemsRewarded: 45
     maxGemsRewarded: 60
     openDurationInMinutes: 60
     chestRarity: 2
-    chestIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+    chestLockedIcon: {fileID: 21300000, guid: 45e0e7716f2b3a44bb2c28c15c52588e, type: 3}
+    chestUnlockingIcon: {fileID: 0}
+    chestUnlockedIcon: {fileID: 0}
   - minCoinsRewarded: 1000
     maxCoinsRewarded: 1200
     minGemsRewarded: 80
     maxGemsRewarded: 100
     openDurationInMinutes: 180
     chestRarity: 3
-    chestIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+    chestLockedIcon: {fileID: 21300000, guid: 45e0e7716f2b3a44bb2c28c15c52588e, type: 3}
+    chestUnlockingIcon: {fileID: 0}
+    chestUnlockedIcon: {fileID: 0}

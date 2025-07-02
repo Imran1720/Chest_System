@@ -12,6 +12,8 @@ namespace ChestSystem.Chest
         public int maxGemsRewarded;
         public int openDurationInMinutes;
         public EChestType chestRarity;
-        public Sprite chestIcon;
+        public Sprite chestLockedIcon;
+        public Sprite chestUnlockingIcon;
+        public Sprite chestUnlockedIcon;
     }
 }

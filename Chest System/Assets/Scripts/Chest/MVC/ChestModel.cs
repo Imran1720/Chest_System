@@ -22,11 +22,12 @@ namespace ChestSystem.Chest
         public int GetCoinsToBeRewarded() => coinsToBeRewarded;
         public int GetGemsToBeRewarded() => gemsToBeRewarded;
 
-
         public void SetCoinsToBeRewarded(int amount) => coinsToBeRewarded = amount;
         public void SetGemsToBeRewarded(int amount) => gemsToBeRewarded = amount;
         public EChestType GetChesRarity() => data.chestRarity;
-        public Sprite GetChestIcon() => data.chestIcon;
+        public Sprite GetChestLockedIcon() => data.chestLockedIcon;
+        public Sprite GetChestUnlockedIcon() => data.chestUnlockedIcon;
+        public Sprite GetChestUnlockingIcon() => data.chestUnlockingIcon;
         public ChestData GetChestData() => data;
     }
 }

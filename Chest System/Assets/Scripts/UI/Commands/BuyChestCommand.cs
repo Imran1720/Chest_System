@@ -17,6 +17,6 @@ namespace ChestSystem.Chest
             eventService.OnChestBought.InvokeEvent(chestController);
         }
 
-        public void Undo() => eventService.OnUndo.InvokeEvent(chestController);
+        public void Undo() => eventService.OnProcessingUndo.InvokeEvent(chestController);
     }
 }

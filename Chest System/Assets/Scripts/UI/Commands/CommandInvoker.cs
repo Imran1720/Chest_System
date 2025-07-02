@@ -1,3 +1,4 @@
+using ChestSystem.Events;
 using System.Collections.Generic;
 
 namespace ChestSystem.Chest
@@ -5,10 +6,14 @@ namespace ChestSystem.Chest
     public class CommandInvoker
     {
         private Stack<ICommand> undoCommandHistory;
-
-        public CommandInvoker()
+        private EventService eventService;
+        public CommandInvoker(EventService eventService)
         {
+            this.eventService = eventService;
             undoCommandHistory = new Stack<ICommand>();
+
+            eventService.OnUndoClicked.AddListener(UndoCommand);
+            eventService.OnProcessingReward.AddListener(ClearHistory);
         }
 
         public void AddCommand(ICommand command)

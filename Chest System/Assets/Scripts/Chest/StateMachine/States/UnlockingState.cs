@@ -1,4 +1,5 @@
 using ChestSystem.Core;
+using ChestSystem.Events;
 using ChestSystem.UI;
 using ChestSystem.UI.PopUp;
 using System;
@@ -11,28 +12,28 @@ namespace ChestSystem.Chest
         public ChestController ChestController { get; set; }
         private ChestStateMachine chestStateMachine;
 
-        ChestService chestService;
+        GameService gameService;
+        EventService eventService;
 
         private float timer;
         private int costUpdateThreshold = 10;
-        public UnlockingState(ChestStateMachine chestStateMachine, ChestController chestController)
+        public UnlockingState(ChestStateMachine chestStateMachine, ChestController chestController, GameService gameService)
         {
             this.chestStateMachine = chestStateMachine;
             ChestController = chestController;
-            chestService = GameService.Instance.GetChestService();
+
+            this.gameService = gameService;
+            eventService = gameService.GetEventService();
         }
 
         public void OnStateEntered()
         {
-            chestService.SetIsChestUnlocking(true);
+            gameService.SetIsChestUnlocking(true);
             ChestController.SetLockedUI(true);
             timer = ChestController.GetChestOpenDuration() * 60;
         }
 
-        public void OnStateExited()
-        {
-            chestService.SetIsChestUnlocking(false);
-        }
+        public void OnStateExited() => gameService.SetIsChestUnlocking(false);
 
         public void Update()
         {
@@ -56,14 +57,8 @@ namespace ChestSystem.Chest
             return (((int)timer % updateVector) == 0);
         }
 
-        public void OnClick()
-        {
-            ChestController.ShowBuyPopUP();
-        }
+        public void OnClick() => eventService.OnUnlockingChestClicked.InvokeEvent(ChestController);
 
-        public int GetChestBuyingCost()
-        {
-            return ChestController.CalculateChestBuyingCost(timer);
-        }
+        public int GetChestBuyingCost() => ChestController.CalculateChestBuyingCost(timer);
     }
 }
