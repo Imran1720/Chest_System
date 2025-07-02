@@ -19,19 +19,19 @@ namespace ChestSystem.UI
         private PlayerService playerService;
         private EventService eventService;
 
-        [Header("PopUp-UI")]
+        [Header("PopUp UI")]
         [SerializeField] private PopUpService popUpServicePrefab;
 
-        [Header("CURRENCY")]
+        [Header("Currency")]
         [SerializeField] private TextMeshProUGUI gemCountText;
         [SerializeField] private TextMeshProUGUI coinCountText;
 
-        [Header("SLOT-DATA")]
+        [Header("Slot Data")]
         [SerializeField] private SlotData slotPrefab;
         [SerializeField] private int initialSlotCount;
         [SerializeField] private GameObject slotContainer;
 
-        [Header("BUTTONS")]
+        [Header("Buttons")]
         [SerializeField] private Button undoButton;
         [SerializeField] private Button addSlotButton;
         [SerializeField] private Button generateChestButton;
@@ -48,7 +48,10 @@ namespace ChestSystem.UI
             generateChestButton.onClick.AddListener(GenerateChest);
         }
 
-        public void CreateSlotService(EventService eventService) => slotService = new SlotService(slotPrefab, slotContainer, initialSlotCount, eventService);
+        public void CreateSlotService(EventService eventService)
+        {
+            slotService = new SlotService(slotPrefab, slotContainer, initialSlotCount, eventService);
+        }
 
         public void InitializeServices(GameService gameService)
         {
@@ -56,13 +59,17 @@ namespace ChestSystem.UI
             playerService = gameService.GetPlayerService();
             eventService = gameService.GetEventService();
 
-            popUpService = Instantiate(popUpServicePrefab);
-            popUpService.transform.SetParent(transform, false);
-            popUpService.InitializeServices(gameService);
-
+            SetUpPopUpService(gameService);
 
             AddEventListeners();
             UpdateCurrencies();
+        }
+
+        private void SetUpPopUpService(GameService gameService)
+        {
+            popUpService = Instantiate(popUpServicePrefab);
+            popUpService.transform.SetParent(transform, false);
+            popUpService.InitializeServices(gameService);
         }
 
         private void AddEventListeners()
