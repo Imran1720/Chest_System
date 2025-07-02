@@ -50,7 +50,7 @@ namespace ChestSystem.UI
 
         public void CreateSlotService(EventService eventService) => slotService = new SlotService(slotPrefab, slotContainer, initialSlotCount, eventService);
 
-        public void InitializeSevices(GameService gameService)
+        public void InitializeServices(GameService gameService)
         {
             chestService = gameService.GetChestService();
             playerService = gameService.GetPlayerService();

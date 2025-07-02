@@ -7,11 +7,9 @@ namespace ChestSystem.Player
     public class PlayerService
     {
         PlayerController playerController;
-        EventService eventService;
         public PlayerService(int initialCoinCount, int initalGemCount, EventService eventService)
         {
-            this.eventService = eventService;
-            PlayerModel playerModel = new PlayerModel(initialCoinCount, initalGemCount);
+            PlayerModel playerModel = new PlayerModel(initialCoinCount, initalGemCount, eventService);
             playerController = new PlayerController(playerModel);
 
             eventService.OnRewardCollected.AddListener(RewardPlayer);
@@ -29,7 +27,6 @@ namespace ChestSystem.Player
         public void DecrementCoinsBy(int value) => playerController.DecrementPlayerCoinsBy(value);
         public void DecrementGemsBy(int value) => playerController.DecrementPlayerGemsBy(value);
 
-        //public void RewardPlayer(int coins, int gems) => playerController.RewardPlayer(coins, gems);
         public void RewardPlayer(ChestController controller) => playerController.RewardPlayer(controller.GetCoinsToBeRewarded(), controller.GetGemsToBeRewarded());
     }
 }

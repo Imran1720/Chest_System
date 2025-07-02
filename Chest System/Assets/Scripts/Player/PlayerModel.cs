@@ -9,11 +9,11 @@ namespace ChestSystem.Player
         private int gemCount;
         private EventService eventService;
 
-        public PlayerModel(int initialCoinCount, int initialGemCount)
+        public PlayerModel(int initialCoinCount, int initialGemCount, EventService eventService)
         {
             coinCount = initialCoinCount;
             gemCount = initialGemCount;
-            eventService = GameService.Instance.GetEventService();
+            this.eventService = eventService;
         }
 
         public void SetCoinCount(int count)

@@ -11,29 +11,27 @@ namespace ChestSystem.Core
 {
     public class GameService : MonoBehaviour
     {
-        public static GameService Instance;
 
         private EventService eventService;
         private SoundService soundService;
         private ChestService chestService;
         private PlayerService playerService;
-        [SerializeField] private UIService UIService;
+        [SerializeField] private UIService uiService;
 
         private CommandInvoker commandInvoker;
 
-        [Header("CHEST-DATA")]
-        [SerializeField] ChestSO chestSO;
-        [SerializeField] ChestView chestPrefab;
+        [Header("Chest Data")]
+        [SerializeField] private ChestSO chestSO;
+        [SerializeField] private ChestView chestPrefab;
 
-        [Header("AUDIO-DATA")]
-        [SerializeField] SoundClipsSO soundClips;
-        [SerializeField] AudioSource audioSourceBGM;
-        [SerializeField] AudioSource audioSourceSFX;
+        [Header("Audio Data")]
+        [SerializeField] private SoundClipsSO soundClips;
+        [SerializeField] private AudioSource audioSourceBGM;
+        [SerializeField] private AudioSource audioSourceSFX;
 
-        private void Awake() => Instance = this;
         private void Start()
         {
-            InitializeSevices();
+            InitializeServices();
             InitializeData();
         }
 
@@ -43,30 +41,33 @@ namespace ChestSystem.Core
             GetPopUpService().SetCommandInvoker(commandInvoker);
         }
 
-        private void InitializeSevices()
+        private void InitializeServices()
         {
             eventService = new EventService();
-            UIService.CreateSlotService(eventService);
+
+            uiService.CreateSlotService(eventService);
             playerService = new PlayerService(3, 3, eventService);
             chestService = new ChestService(chestSO, chestPrefab, this);
             soundService = new SoundService(audioSourceBGM, audioSourceSFX, soundClips);
 
-            UIService.InitializeSevices(this);
+            uiService.InitializeServices(this);
         }
 
-        private void Update() => chestService.Update();
+        private void Update()
+        {
+            chestService.Update();
+        }
 
+        //Chest Unlock Limit Logic
         public bool CanUnlockChest() => chestService.CanUnlockChest();
         public void SetIsChestUnlocking(bool value) => chestService.SetIsChestUnlocking(value);
 
         //Service Getters
-        public UIService GetUIService() => UIService;
         public SoundService GetSoundService() => soundService;
         public ChestService GetChestService() => chestService;
         public EventService GetEventService() => eventService;
         public PlayerService GetPlayerService() => playerService;
-        public SlotService GetSlotService() => UIService.GetSlotService();
-        public PopUpService GetPopUpService() => UIService.GetPopUpService();
-
+        public SlotService GetSlotService() => uiService.GetSlotService();
+        public PopUpService GetPopUpService() => uiService.GetPopUpService();
     }
 }
