@@ -1,6 +1,7 @@
 using ChestSystem.Chest;
 using ChestSystem.Events;
 using ChestSystem.UI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -64,4 +65,5 @@ public class ChestView : MonoBehaviour, IPointerDownHandler
 
     public void Reset() => background.color = defaultBGColor;
     public void SetOpenedChestBG() => background.color = openBGColor;
+
 }

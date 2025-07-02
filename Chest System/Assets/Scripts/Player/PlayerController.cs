@@ -18,14 +18,12 @@ namespace ChestSystem.Player
         {
             int currentPlayerCoins = playerModel.GetCoinCount();
             playerModel.SetCoinCount(currentPlayerCoins + value);
-            uiService.UpdateCurrencies();
         }
 
         public void IncrementPlayerGemsBy(int value)
         {
             int currentPlayerGems = playerModel.GetGemCount();
             playerModel.SetGemCount(currentPlayerGems + value);
-            uiService.UpdateCurrencies();
         }
 
         public void DecrementPlayerCoinsBy(int value)
@@ -35,7 +33,6 @@ namespace ChestSystem.Player
             currentPlayerCoins = (currentPlayerCoins <= 0) ? 0 : currentPlayerCoins;
 
             playerModel.SetCoinCount(currentPlayerCoins);
-            uiService.UpdateCurrencies();
         }
 
         public void DecrementPlayerGemsBy(int value)
@@ -45,7 +42,6 @@ namespace ChestSystem.Player
             currentPlayerGems = (currentPlayerGems <= 0) ? 0 : currentPlayerGems;
 
             playerModel.SetGemCount(currentPlayerGems);
-            uiService.UpdateCurrencies();
         }
 
         public bool HasSufficientCoins(int amount) => playerModel.GetCoinCount() >= amount;

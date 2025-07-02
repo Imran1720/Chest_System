@@ -52,6 +52,7 @@ namespace ChestSystem.Core
 
             UIService.InitializeSevices(this);
             chestService.InitializeSevices(this);
+
         }
 
         private void Update() => chestService.Update();

@@ -19,11 +19,7 @@ namespace ChestSystem.Chest
 
         public void OnStateEntered()
         {
-            ChestController.SetViewInactive();
-            ChestController.EmptyCurrentSlot();
-            ChestController.ReturnChestToPool();
-            GameService.Instance.GetPlayerService().RewardPlayer(ChestController.GetCoinsToBeRewarded(), ChestController.GetGemsToBeRewarded());
-            GameService.Instance.GetUIService().UpdateCurrencies();
+            GameService.Instance.GetEventService().OnRewardCollected.InvokeEvent(ChestController);
         }
 
         public void OnStateExited()

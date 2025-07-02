@@ -25,7 +25,7 @@ namespace ChestSystem.Chest
             ChestController.SetLockedUI(false);
         }
 
-        public void OnStateExited() => ChestController.ClearCommandHistory();
+        public void OnStateExited() { }
 
         public void Update()
         {

@@ -15,6 +15,7 @@ namespace ChestSystem.Chest
 
         private UIService uiService;
         private SlotService slotService;
+        private EventService eventService;
 
         private bool isUnlockingChest = false;
 
@@ -24,8 +25,11 @@ namespace ChestSystem.Chest
         {
             this.chestSO = chestSO;
             this.chestPrefab = chestPrefab;
+            this.eventService = eventService;
 
             chestPool = new ChestPool(chestPrefab, uiService, eventService);
+
+            AddEventListeners();
         }
 
         public void InitializeSevices(GameService gameService)
@@ -33,6 +37,8 @@ namespace ChestSystem.Chest
             uiService = gameService.GetUIService();
             slotService = uiService.GetSlotService();
         }
+
+        private void AddEventListeners() => eventService.OnRewardCollected.AddListener(ReturnChestToPool);
 
         public void CreateChest(SlotData slotData)
         {
