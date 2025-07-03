@@ -32,7 +32,7 @@ namespace ChestSystem.Chest
         public void OnStateExited() { }
 
         public int GetChestBuyingCost() => ChestController.GetDefaultBuyingCost();
-        public void OnClick() => eventService.OnLockedChestClicked.InvokeEvent(ChestController);
+        public void OnChestSelected() => eventService.OnLockedChestClicked.InvokeEvent(ChestController);
     }
 }
 

@@ -21,7 +21,7 @@ namespace ChestSystem.Chest
         public void OnStateEntered() => eventService.OnRewardCollected.InvokeEvent(ChestController);
 
         public void Update() { }
-        public void OnClick() { }
+        public void OnChestSelected() { }
         public void OnStateExited() { }
     }
 }

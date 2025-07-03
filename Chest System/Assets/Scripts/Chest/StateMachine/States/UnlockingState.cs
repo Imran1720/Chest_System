@@ -57,7 +57,7 @@ namespace ChestSystem.Chest
             return (((int)timer % updateVector) == 0);
         }
 
-        public void OnClick() => eventService.OnUnlockingChestClicked.InvokeEvent(ChestController);
+        public void OnChestSelected() => eventService.OnUnlockingChestClicked.InvokeEvent(ChestController);
 
         public int GetChestBuyingCost() => ChestController.CalculateChestBuyingCost(timer);
     }

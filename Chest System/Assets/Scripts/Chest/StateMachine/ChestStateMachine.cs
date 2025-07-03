@@ -34,7 +34,7 @@ namespace ChestSystem.Chest
             currentState?.OnStateEntered();
         }
 
-        public void ProcessOnClick() => currentState.OnClick();
+        public void ProcessOnClick() => currentState.OnChestSelected();
         private IState GetState(EChestState state) => chestStatesList[state];
 
         public EChestState GetCurrentStateType()

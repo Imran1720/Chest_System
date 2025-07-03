@@ -14,7 +14,7 @@ namespace ChestSystem.Chest
             ChestController = chestController;
         }
 
-        public void OnClick() => chestStateMachine.ChangeState(EChestState.COLLECTED);
+        public void OnChestSelected() => chestStateMachine.ChangeState(EChestState.COLLECTED);
 
         public void OnStateEntered()
         {

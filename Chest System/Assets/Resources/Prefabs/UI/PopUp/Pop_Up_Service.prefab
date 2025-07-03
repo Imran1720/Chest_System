@@ -1455,6 +1455,7 @@ MonoBehaviour:
   closePopUpButton: {fileID: 5209239538426816266}
   warningMessageText: {fileID: 5209239539675117761}
   openingCostText: {fileID: 5209239539396767357}
+  messagesList: {fileID: 11400000, guid: 6f1112c8405b88f4884d6d5fb295cc6b, type: 2}
 --- !u!1 &5209239539675117767
 GameObject:
   m_ObjectHideFlags: 0
