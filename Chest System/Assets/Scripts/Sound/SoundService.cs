@@ -1,3 +1,4 @@
+using ChestSystem.Events;
 using UnityEngine;
 
 namespace ChestSystem.Sound
@@ -9,6 +10,8 @@ namespace ChestSystem.Sound
 
         private SoundClipsSO soundsList;
 
+        private EventService eventService;
+
         public SoundService(AudioSource audioSourceBGM, AudioSource audioSourceSFX, SoundClipsSO soundsList)
         {
             this.audioSourceBGM = audioSourceBGM;
@@ -18,10 +21,23 @@ namespace ChestSystem.Sound
             PlayBGM();
         }
 
+        private void AddEventListeners()
+        {
+            eventService.OnRewardSoundRequested.AddListener(OnChestBought);
+            eventService.OnButtonClickSoundRequested.AddListener(OnChestSelected);
+            eventService.OnPopUpSoundRequested.AddListener(OnPopUpSoundRequested);
+        }
+
+        public void SetService(EventService eventService)
+        {
+            this.eventService = eventService;
+            AddEventListeners();
+        }
+
         private void PlayBGM()
         {
             AudioClip clip = GetSoundClip(ESoundType.BGM);
-            if (audioSourceBGM.clip != null)
+            if (clip != null)
             {
                 audioSourceBGM.clip = clip;
                 audioSourceBGM.Play();
@@ -47,5 +63,9 @@ namespace ChestSystem.Sound
             }
             return soundItem.audioClip;
         }
+
+        private void OnChestBought() => PlaySFX(ESoundType.ITEM_GAIN);
+        private void OnChestSelected() => PlaySFX(ESoundType.BUTTON_CLICK);
+        private void OnPopUpSoundRequested() => PlaySFX(ESoundType.POPUP);
     }
 }

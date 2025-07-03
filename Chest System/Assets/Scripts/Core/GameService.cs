@@ -49,6 +49,7 @@ namespace ChestSystem.Core
             chestService = new ChestService(chestSO, chestPrefab, this);
             soundService = new SoundService(audioSourceBGM, audioSourceSFX, soundClips);
 
+            soundService.SetService(eventService);
             uiService.InitializeServices(this);
         }
 

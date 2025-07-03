@@ -12,6 +12,11 @@ namespace ChestSystem.Events
         // Reward Processing Event
         public EventController OnRewardProcessing { get; private set; }
 
+        // Sound Events
+        public EventController OnRewardSoundRequested { get; private set; }
+        public EventController OnPopUpSoundRequested { get; private set; }
+        public EventController OnButtonClickSoundRequested { get; private set; }
+
         // View Controller Linked Event
         public EventController<ChestView> OnChestSelected { get; private set; }
 
@@ -30,6 +35,10 @@ namespace ChestSystem.Events
             OnInsufficientFunds = new EventController();
 
             OnChestSelected = new EventController<ChestView>();
+
+            OnRewardSoundRequested = new EventController();
+            OnButtonClickSoundRequested = new EventController();
+            OnPopUpSoundRequested = new EventController();
 
             OnChestBought = new EventController<ChestController>();
             OnProcessingUndo = new EventController<ChestController>();

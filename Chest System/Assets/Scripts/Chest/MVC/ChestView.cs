@@ -62,7 +62,7 @@ namespace ChestSystem.Chest
             openUI.SetActive(!isLocked);
         }
 
-        public void OnPointerDown(PointerEventData eventData) => eventService?.OnChestSelected.InvokeEvent(this);
+        public void OnPointerDown(PointerEventData eventData) => eventService.OnChestSelected.InvokeEvent(this);
 
         public void SetServices(EventService eventService) => this.eventService = eventService;
         public void SetState(EChestState state) => chestStateText.text = GetChestStateText(state);

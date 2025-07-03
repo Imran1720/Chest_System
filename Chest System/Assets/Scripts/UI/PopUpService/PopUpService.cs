@@ -76,6 +76,7 @@ namespace ChestSystem.UI.PopUp
         {
             chestController = controller;
             ShowPopUp();
+            eventService.OnPopUpSoundRequested.InvokeEvent();
             startTimerButton.gameObject.SetActive(showStartTimer);
             openingCostText.text = (controller.GetChestBuyingCost()).ToString();
             buyPopUpBox.SetActive(true);
@@ -89,6 +90,7 @@ namespace ChestSystem.UI.PopUp
 
         public void ClosePopUp()
         {
+            eventService.OnButtonClickSoundRequested.InvokeEvent();
             buyPopUpBox.SetActive(false);
             warningPopUpBox.SetActive(false);
             SetPopUpElementsActive(false);
@@ -117,18 +119,21 @@ namespace ChestSystem.UI.PopUp
 
         private void StartTimer()
         {
+            eventService.OnButtonClickSoundRequested.InvokeEvent();
             chestController.StartTimer();
             ClosePopUp();
         }
 
         private void BuyWithGems()
         {
+            eventService.OnButtonClickSoundRequested.InvokeEvent();
             ICommand buyCommand = new BuyChestCommand(chestController, eventService);
             commandInvoker.AddCommand(buyCommand);
         }
 
         private void OnLockedChestClicked(ChestController controller)
         {
+            eventService.OnPopUpSoundRequested.InvokeEvent();
             if (controller.CanUnlockChest())
             {
                 ShowUnlockPopUP(controller);

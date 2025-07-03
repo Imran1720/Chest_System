@@ -18,7 +18,11 @@ namespace ChestSystem.Chest
             this.eventService = eventService;
         }
 
-        public void OnStateEntered() => eventService.OnRewardCollected.InvokeEvent(ChestController);
+        public void OnStateEntered()
+        {
+            eventService.OnRewardSoundRequested.InvokeEvent();
+            eventService.OnRewardCollected.InvokeEvent(ChestController);
+        }
         public int GetChestBuyingCost() => 0;
 
         public void OnChestSelected() { }

@@ -92,6 +92,7 @@ namespace ChestSystem.UI
 
         private void GenerateChest()
         {
+            eventService.OnButtonClickSoundRequested.InvokeEvent();
             if (!slotService.IsEmptySlotAvailable())
             {
                 popUpService.ShowSlotsFullPopUP();
@@ -101,12 +102,20 @@ namespace ChestSystem.UI
             SlotData slotData = slotService.GetEmptySlot();
             chestService.CreateChest(slotData);
         }
+        private void AddSlot()
+        {
+            eventService.OnButtonClickSoundRequested.InvokeEvent();
+            slotService.AddEmptySlot();
+        }
+        private void UndoPurchase()
+        {
+            eventService.OnButtonClickSoundRequested.InvokeEvent();
+            eventService.OnUndoClicked.InvokeEvent();
+        }
 
         public SlotService GetSlotService() => slotService;
-        private void AddSlot() => slotService.AddEmptySlot();
         public void OnCurrencyUpdated() => UpdateCurrencies();
         public PopUpService GetPopUpService() => popUpService;
-        private void UndoPurchase() => eventService.OnUndoClicked.InvokeEvent();
         private void OnChestBought(ChestController controller) => UpdateCurrencies();
         private void UpdateGemCount() => gemCountText.text = playerService.GetGemCount().ToString();
         private void UpdateCoinCount() => coinCountText.text = playerService.GetCoinCount().ToString();
