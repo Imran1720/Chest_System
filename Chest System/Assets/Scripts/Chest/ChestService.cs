@@ -72,7 +72,15 @@ namespace ChestSystem.Chest
         }
 
         private void AddEventListeners() => eventService.OnRewardCollected.AddListener(ReturnChestToPool);
-        public void RemoveEventListeners() => eventService.OnRewardCollected.RemoveListener(ReturnChestToPool);
+        public void RemoveEventListeners()
+        {
+            eventService.OnRewardCollected.RemoveListener(ReturnChestToPool);
+
+            foreach (ChestController controller in chestControllersList)
+            {
+                controller.RemoveEventListeners();
+            }
+        }
 
         public void ReturnChestToPool(ChestController controller) => chestPool.ReturnChest(controller);
 

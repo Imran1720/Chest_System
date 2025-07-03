@@ -15,7 +15,6 @@ namespace ChestSystem.Chest
         EventService eventService;
 
         private float timer;
-        private int costUpdateIntervalInMinutes = 10;
 
         public UnlockingState(ChestStateMachine chestStateMachine, ChestController chestController, EventService eventService)
         {
@@ -28,12 +27,7 @@ namespace ChestSystem.Chest
         public void OnStateEntered()
         {
             ChestController.SetLockedUI(true);
-            timer = ConvertTimeIntoSeconds();
-        }
-
-        private int ConvertTimeIntoSeconds()
-        {
-            return ChestController.GetChestOpenDuration();
+            timer = ChestController.GetChestOpenDuration();
         }
 
         public void Update()
@@ -51,14 +45,10 @@ namespace ChestSystem.Chest
             }
         }
 
-        private bool CanUpdateCost()
-        {
-            int updateIntervalInSeconds = costUpdateIntervalInMinutes * ChestController.GetSecondsPerMinute();
-            return (((int)timer % updateIntervalInSeconds) == 0);
-        }
+        private bool CanUpdateCost() => (((int)timer % ChestController.GetUpdateInterval()) == 0);
 
         public void OnChestSelected() => eventService.OnUnlockingChestClicked.InvokeEvent(ChestController);
-        public int GetChestBuyingCost() => ChestController.CalculateChestBuyingCost(timer);
+        public int GetChestBuyingCost() => ChestController.GetChestBuyingCostByTime(timer);
         public void OnStateExited() { }
     }
 }

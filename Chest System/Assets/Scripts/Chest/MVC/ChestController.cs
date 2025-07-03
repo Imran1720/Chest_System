@@ -1,8 +1,6 @@
 using ChestSystem.Core;
 using ChestSystem.Events;
 using ChestSystem.Player;
-using ChestSystem.UI;
-using ChestSystem.UI.PopUp;
 using ChestSystem.UI.Slot;
 using UnityEngine;
 
@@ -21,8 +19,10 @@ namespace ChestSystem.Chest
         private EventService eventService;
         private PlayerService playerService;
 
-        private int secondsPerminute = 60;
-        private int secondsPerhour = 3600;
+        private const int secondsPerMinute = 60;
+        private const int secondsPerHour = 3600;
+        private const int costUpdateIntervalInMinutes = 10;
+        private const int minimumGem = 1;
 
         public ChestController(ChestView chestView, ChestModel chestModel, SlotData slotData, GameService gameService)
         {
@@ -32,26 +32,26 @@ namespace ChestSystem.Chest
             this.gameService = gameService;
 
             InitializeServices();
-            AddListeners();
+            AddEventListeners();
 
             CreateChestStateMachine();
             CalculateReward();
-            ResetChest();
+            ResetToDefaultState();
         }
 
-        private void AddListeners()
+        private void AddEventListeners()
         {
-            eventService.OnChestSelected.AddListener(OnChestSelected);
-            eventService.OnChestBought.AddListener(OnChestBought);
             eventService.OnProcessingUndo.AddListener(OnUndo);
+            eventService.OnChestBought.AddListener(OnChestBought);
+            eventService.OnChestSelected.AddListener(OnChestSelected);
             eventService.OnRewardCollected.AddListener(OnRewardCollected);
         }
 
-        ~ChestController()
+        public void RemoveEventListeners()
         {
-            eventService.OnChestSelected.RemoveListener(OnChestSelected);
-            eventService.OnChestBought.RemoveListener(OnChestBought);
             eventService.OnProcessingUndo.RemoveListener(OnUndo);
+            eventService.OnChestBought.RemoveListener(OnChestBought);
+            eventService.OnChestSelected.RemoveListener(OnChestSelected);
         }
 
         public void InitializeServices()
@@ -61,15 +61,6 @@ namespace ChestSystem.Chest
             playerService = gameService.GetPlayerService();
         }
 
-        public void ResetChest()
-        {
-            chestView.Reset();
-            slotService.FillSlot(slotData);
-            ChangeToDefaultState();
-        }
-
-        public void ChangeToDefaultState() => chestStateMachine.ChangeState(EChestState.LOCKED);
-
         public void Update() => chestStateMachine.Update();
 
         public void UpdateChestUI(EChestState currentState)
@@ -77,47 +68,12 @@ namespace ChestSystem.Chest
             ChestData chestData = chestModel.GetChestData();
             chestView.SetState(currentState);
 
-            int timer = chestData.openDuration * 60;
+            int timer = GetChestOpenDuration();
             chestView.SetTimer(CalculateHours(timer), CalculateMinutes(timer));
 
             Sprite icon = chestData.chestIcon;
             chestView.SetChestIcon(icon);
-            chestView.SetOpeningCost(CalculateChestBuyingCost(timer));
-        }
-
-        public void SetChestTime(int hour, int minute) => chestView.SetTimer(hour, minute);
-
-        public void SetChestIcon(Sprite chestSprite) => chestView.SetChestIcon(chestSprite);
-
-        public void SetChestGemPrice(int price) => chestView.SetOpeningCost(price);
-
-        private void CreateChestStateMachine() => chestStateMachine = new ChestStateMachine(this, eventService);
-
-        public void OnChestSelected(ChestView view)
-        {
-            if (view.Equals(chestView))
-            {
-                chestStateMachine.ProcessOnClick();
-            }
-        }
-
-        private void OpenWithGems() => chestStateMachine.ChangeState(EChestState.UNLOCKED);
-        public void StartTimer() => chestStateMachine.ChangeState(EChestState.UNLOCKING);
-
-        private void OnChestBought(ChestController controller)
-        {
-            if (this == controller)
-            {
-                if (CanBuyChest())
-                {
-                    gameService.GetPlayerService().DecrementGemsBy(GetChestBuyingCost());
-                    OpenWithGems();
-                }
-                else
-                {
-                    eventService.OnInsufficientFunds.InvokeEvent();
-                }
-            }
+            chestView.SetOpeningCost(GetChestBuyingCostByTime(timer));
         }
 
         private void CalculateReward()
@@ -126,13 +82,15 @@ namespace ChestSystem.Chest
             CalculateGemsToBeRewarded();
         }
 
-        public int CalculateChestBuyingCost(float timer)
+        public int GetChestBuyingCostByTime(float timer)
         {
-            int elapsedTime = (int)timer / 60;
-            int gemsRequired = (int)(Mathf.Ceil((float)elapsedTime / 10));
-            if (gemsRequired == 0)
-                gemsRequired = 1;
+            int elapsedTime = (int)timer / secondsPerMinute;
+            int gemsRequired = (int)(Mathf.Ceil((float)elapsedTime / costUpdateIntervalInMinutes));
 
+            if (gemsRequired == 0)
+            {
+                gemsRequired = minimumGem;
+            }
             return gemsRequired;
         }
 
@@ -154,17 +112,9 @@ namespace ChestSystem.Chest
             chestModel.SetGemsToBeRewarded(gemQuantity);
         }
 
-        public int GetCoinsToBeRewarded() => chestModel.GetCoinsToBeRewarded();
-        public int GetGemsToBeRewarded() => chestModel.GetGemsToBeRewarded();
-
-        public int GetChestOpenDuration() => chestModel.GetOpenDuration() * secondsPerminute;
-
-        public int CalculateMinutes(float timer) => (int)timer / secondsPerminute;
-        public int CalculateHours(float timer) => (int)timer / secondsPerhour;
-
         public void UpdateCost(float timer)
         {
-            int gemsRequired = CalculateChestBuyingCost(timer);
+            int gemsRequired = GetChestBuyingCostByTime(timer);
             SetChestGemPrice(gemsRequired);
         }
 
@@ -176,16 +126,6 @@ namespace ChestSystem.Chest
             SetChestTime(hours, minutes);
         }
 
-        public void SetOpenedChestBG() => chestView.SetOpenedChestBG();
-
-        public void SetLockedUI(bool value) => chestView.SetLockedUI(value, GetCurrentChestState());
-
-        public void SetViewActive() => chestView.gameObject.SetActive(true);
-        public void SetViewInactive() => chestView.gameObject.SetActive(false);
-
-        public void EmptyCurrentSlot() => slotService.EmptySlot(slotData);
-        public EChestType GetChestRarity() => chestModel.GetChestRarity();
-
         public void SwitchSlot(SlotData slotData)
         {
             this.slotData = slotData;
@@ -194,25 +134,44 @@ namespace ChestSystem.Chest
             chestView.transform.SetParent(slotData.transform, true);
         }
 
-        public bool CanBuyChest()
+        public void ResetToDefaultState()
         {
-            int requiredGems = GetChestBuyingCost();
-            return playerService.HasSufficientGems(requiredGems);
+            chestView.Reset();
+            slotService.FillSlot(slotData);
+            ChangeToLockedState();
         }
 
-        public int GetChestBuyingCost() => chestStateMachine.GetChestBuyingCost();
-        public int GetDefaultBuyingCost() => CalculateChestBuyingCost(chestModel.GetOpenDuration() * secondsPerminute);
-
-        public bool CanUnlockChest() => gameService.CanUnlockChest();
-
-        public EChestState GetCurrentChestState() => chestStateMachine.GetCurrentStateType();
-
+        //Event Listeners
         private void OnUndo(ChestController controller)
         {
             if (controller == this)
             {
-                ResetChest();
+                ResetToDefaultState();
                 playerService.IncrementGemsBy(GetChestBuyingCost());
+            }
+        }
+
+        private void OnChestBought(ChestController controller)
+        {
+            if (this == controller)
+            {
+                if (CanBuyChest())
+                {
+                    playerService.DecrementGemsBy(GetChestBuyingCost());
+                    OpenWithGems();
+                }
+                else
+                {
+                    eventService.OnInsufficientFunds.InvokeEvent();
+                }
+            }
+        }
+
+        private void OnChestSelected(ChestView view)
+        {
+            if (view.Equals(chestView))
+            {
+                chestStateMachine.ProcessOnClick();
             }
         }
 
@@ -225,7 +184,50 @@ namespace ChestSystem.Chest
             }
         }
 
+        // Default State Setter
+        public void ChangeToLockedState() => chestStateMachine.ChangeState(EChestState.LOCKED);
+
+        // Buying Cost Getters
+        public int GetChestBuyingCost() => chestStateMachine.GetChestBuyingCost();
+        public int GetDefaultBuyingCost() => GetChestBuyingCostByTime(chestModel.GetOpenDuration() * secondsPerMinute);
+
+        // Utilities
         public SlotData GetCurrentSlot() => slotData;
-        public int GetSecondsPerMinute() => secondsPerminute;
+
+        public int GetSecondsPerMinute() => secondsPerMinute;
+        public int GetUpdateInterval() => costUpdateIntervalInMinutes * secondsPerMinute;
+
+        public bool CanUnlockChest() => gameService.CanUnlockChest();
+        public bool CanBuyChest() => playerService.HasSufficientGems(GetChestBuyingCost());
+
+        public EChestState GetCurrentChestState() => chestStateMachine.GetCurrentStateType();
+
+
+        // Chest View Modifiers
+        public void SetViewActive() => chestView.gameObject.SetActive(true);
+        public void SetViewInactive() => chestView.gameObject.SetActive(false);
+
+        public void SetOpenedChestBG() => chestView.SetOpenedChestBG();
+        public void SetChestGemPrice(int price) => chestView.SetOpeningCost(price);
+        public void SetChestTime(int hour, int minute) => chestView.SetTimer(hour, minute);
+        public void SetChestIcon(Sprite chestSprite) => chestView.SetChestIcon(chestSprite);
+        public void SetLockedUI(bool value) => chestView.SetLockedUI(value, GetCurrentChestState());
+
+
+        // Chest Data
+        public int GetGemsToBeRewarded() => chestModel.GetGemsToBeRewarded();
+        public int GetCoinsToBeRewarded() => chestModel.GetCoinsToBeRewarded();
+        public int GetChestOpenDuration() => chestModel.GetOpenDuration() * secondsPerMinute;
+
+        public EChestType GetChestRarity() => chestModel.GetChestRarity();
+
+        // Time Calculations
+        public int CalculateHours(float timer) => (int)timer / secondsPerHour;
+        public int CalculateMinutes(float timer) => (int)timer / secondsPerMinute;
+
+        // Statemachine related Locgic
+        public void StartTimer() => chestStateMachine.ChangeState(EChestState.UNLOCKING);
+        private void OpenWithGems() => chestStateMachine.ChangeState(EChestState.UNLOCKED);
+        private void CreateChestStateMachine() => chestStateMachine = new ChestStateMachine(this, eventService);
     }
 }

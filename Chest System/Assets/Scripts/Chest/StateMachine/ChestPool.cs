@@ -32,9 +32,9 @@ namespace ChestSystem.Chest
                 if (pooledChest != null)
                 {
                     SwitchSlot(pooledChest.controller);
-                    pooledChest.controller.ResetChest();
+                    pooledChest.controller.ResetToDefaultState();
 
-                    pooledChest.controller.ResetChest();
+                    pooledChest.controller.ResetToDefaultState();
                     pooledChest.isUsed = true;
                     return pooledChest.controller;
                 }
