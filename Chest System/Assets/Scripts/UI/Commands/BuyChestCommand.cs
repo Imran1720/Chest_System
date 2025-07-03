@@ -12,11 +12,7 @@ namespace ChestSystem.Chest
             this.eventService = eventService;
         }
 
-        public void Execute()
-        {
-            eventService.OnChestBought.InvokeEvent(chestController);
-        }
-
+        public void Execute() => eventService.OnChestBought.InvokeEvent(chestController);
         public void Undo() => eventService.OnProcessingUndo.InvokeEvent(chestController);
     }
 }
