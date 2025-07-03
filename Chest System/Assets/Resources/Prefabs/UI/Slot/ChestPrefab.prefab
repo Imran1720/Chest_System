@@ -765,13 +765,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chestStateText: {fileID: 1936792416653136530}
-  OpenDurationText: {fileID: 1936792416245827863}
+  openDurationText: {fileID: 1936792416245827863}
   openingCostText: {fileID: 205575134684248864}
   chestIcon: {fileID: 5410640637686296333}
+  background: {fileID: 3928916019905326416}
   lockedStateUI: {fileID: 35407047236325312}
   payUI: {fileID: 2226538095271615973}
-  OpenUI: {fileID: 7263465727052435409}
-  background: {fileID: 3928916019905326416}
+  openUI: {fileID: 7263465727052435409}
   openBGColor: {r: 1, g: 0.9103255, b: 0.427451, a: 0.4745098}
 --- !u!1 &6273130479667789336
 GameObject:
