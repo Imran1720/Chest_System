@@ -79,6 +79,7 @@ namespace ChestSystem.UI
 
         private void OnDisable()
         {
+            slotService.RemoveEventListeners();
             eventService.OnChestBought.RemoveListener(OnChestBought);
             eventService.OnCurrencyUpdated.RemoveListener(OnCurrencyUpdated);
         }

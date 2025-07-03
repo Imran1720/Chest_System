@@ -18,5 +18,7 @@ namespace ChestSystem.UI.Slot
         public void AddEmptySlot() => slotController.AddEmptySlot();
         public void FillSlot(SlotData slot) => slotController.FillSlot(slot);
         public void EmptySlot(SlotData slot) => slotController.EmptySlot(slot);
+
+        public void RemoveEventListeners() => slotController.RemoveEventListeners();
     }
 }
