@@ -12,24 +12,28 @@ namespace ChestSystem.Chest
         public ChestController ChestController { get; set; }
         private ChestStateMachine chestStateMachine;
 
-        GameService gameService;
         EventService eventService;
 
         private float timer;
-        private int costUpdateThreshold = 10;
-        public UnlockingState(ChestStateMachine chestStateMachine, ChestController chestController, GameService gameService)
+        private int costUpdateIntervalInMinutes = 10;
+
+        public UnlockingState(ChestStateMachine chestStateMachine, ChestController chestController, EventService eventService)
         {
             this.chestStateMachine = chestStateMachine;
             ChestController = chestController;
 
-            this.gameService = gameService;
-            eventService = gameService.GetEventService();
+            this.eventService = eventService;
         }
 
         public void OnStateEntered()
         {
             ChestController.SetLockedUI(true);
-            timer = ChestController.GetChestOpenDuration() * 60;
+            timer = ConvertTimeIntoSeconds();
+        }
+
+        private int ConvertTimeIntoSeconds()
+        {
+            return ChestController.GetChestOpenDuration();
         }
 
         public void Update()
@@ -49,14 +53,12 @@ namespace ChestSystem.Chest
 
         private bool CanUpdateCost()
         {
-            int updateVector = costUpdateThreshold * 60;
-
-            return (((int)timer % updateVector) == 0);
+            int updateIntervalInSeconds = costUpdateIntervalInMinutes * ChestController.GetSecondsPerMinute();
+            return (((int)timer % updateIntervalInSeconds) == 0);
         }
 
         public void OnChestSelected() => eventService.OnUnlockingChestClicked.InvokeEvent(ChestController);
-
-        public void OnStateExited() { }
         public int GetChestBuyingCost() => ChestController.CalculateChestBuyingCost(timer);
+        public void OnStateExited() { }
     }
 }

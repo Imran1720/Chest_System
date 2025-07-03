@@ -21,6 +21,9 @@ namespace ChestSystem.Chest
         private EventService eventService;
         private PlayerService playerService;
 
+        private int secondsPerminute = 60;
+        private int secondsPerhour = 3600;
+
         public ChestController(ChestView chestView, ChestModel chestModel, SlotData slotData, GameService gameService)
         {
             this.chestView = chestView;
@@ -88,7 +91,7 @@ namespace ChestSystem.Chest
 
         public void SetChestGemPrice(int price) => chestView.SetOpeningCost(price);
 
-        private void CreateChestStateMachine() => chestStateMachine = new ChestStateMachine(this, gameService);
+        private void CreateChestStateMachine() => chestStateMachine = new ChestStateMachine(this, eventService);
 
         public void OnChestSelected(ChestView view)
         {
@@ -154,10 +157,10 @@ namespace ChestSystem.Chest
         public int GetCoinsToBeRewarded() => chestModel.GetCoinsToBeRewarded();
         public int GetGemsToBeRewarded() => chestModel.GetGemsToBeRewarded();
 
-        public int GetChestOpenDuration() => chestModel.GetOpenDuration();
+        public int GetChestOpenDuration() => chestModel.GetOpenDuration() * secondsPerminute;
 
-        public int CalculateMinutes(float timer) => (int)timer / 60;
-        public int CalculateHours(float timer) => (int)timer / (60 * 60);
+        public int CalculateMinutes(float timer) => (int)timer / secondsPerminute;
+        public int CalculateHours(float timer) => (int)timer / secondsPerhour;
 
         public void UpdateCost(float timer)
         {
@@ -198,7 +201,7 @@ namespace ChestSystem.Chest
         }
 
         public int GetChestBuyingCost() => chestStateMachine.GetChestBuyingCost();
-        public int GetDefaultBuyingCost() => CalculateChestBuyingCost(chestModel.GetOpenDuration() * 60);
+        public int GetDefaultBuyingCost() => CalculateChestBuyingCost(chestModel.GetOpenDuration() * secondsPerminute);
 
         public bool CanUnlockChest() => gameService.CanUnlockChest();
 
@@ -223,5 +226,6 @@ namespace ChestSystem.Chest
         }
 
         public SlotData GetCurrentSlot() => slotData;
+        public int GetSecondsPerMinute() => secondsPerminute;
     }
 }

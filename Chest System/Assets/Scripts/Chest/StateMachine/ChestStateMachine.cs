@@ -1,4 +1,5 @@
 using ChestSystem.Core;
+using ChestSystem.Events;
 using System.Collections.Generic;
 
 namespace ChestSystem.Chest
@@ -10,20 +11,20 @@ namespace ChestSystem.Chest
 
         private IState currentState;
 
-        public ChestStateMachine(ChestController controller, GameService gameService)
+        public ChestStateMachine(ChestController controller, EventService eventService)
         {
             this.controller = controller;
-            CreateStates(gameService);
+            CreateStates(eventService);
         }
 
         public void Update() => currentState?.Update();
 
-        private void CreateStates(GameService gameService)
+        private void CreateStates(EventService eventService)
         {
             stateDictionary.Add(EChestState.UNLOCKED, new UnlockedState(this, controller));
-            stateDictionary.Add(EChestState.LOCKED, new LockedState(this, controller, gameService));
-            stateDictionary.Add(EChestState.UNLOCKING, new UnlockingState(this, controller, gameService));
-            stateDictionary.Add(EChestState.COLLECTED, new CollectedState(this, controller, gameService));
+            stateDictionary.Add(EChestState.LOCKED, new LockedState(this, controller, eventService));
+            stateDictionary.Add(EChestState.UNLOCKING, new UnlockingState(this, controller, eventService));
+            stateDictionary.Add(EChestState.COLLECTED, new CollectedState(this, controller, eventService));
         }
 
         public void ChangeState(EChestState state)
