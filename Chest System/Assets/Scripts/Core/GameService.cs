@@ -11,14 +11,13 @@ namespace ChestSystem.Core
 {
     public class GameService : MonoBehaviour
     {
-
         private EventService eventService;
         private SoundService soundService;
         private ChestService chestService;
         private PlayerService playerService;
-        [SerializeField] private UIService uiService;
-
         private CommandInvoker commandInvoker;
+
+        [SerializeField] private UIService uiService;
 
         [Header("Chest Data")]
         [SerializeField] private ChestSO chestSO;
@@ -56,6 +55,11 @@ namespace ChestSystem.Core
         private void Update()
         {
             chestService.Update();
+        }
+
+        private void OnDisable()
+        {
+            commandInvoker.RemoveEventListeners();
         }
 
         //Chest Unlock Limit Logic

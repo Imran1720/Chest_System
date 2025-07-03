@@ -7,13 +7,25 @@ namespace ChestSystem.Chest
     {
         private Stack<ICommand> undoCommandHistory;
         private EventService eventService;
+
         public CommandInvoker(EventService eventService)
         {
             this.eventService = eventService;
             undoCommandHistory = new Stack<ICommand>();
 
+            AddEventListeners();
+        }
+
+        private void AddEventListeners()
+        {
             eventService.OnUndoClicked.AddListener(UndoCommand);
             eventService.OnProcessingReward.AddListener(ClearHistory);
+        }
+
+        public void RemoveEventListeners()
+        {
+            eventService.OnUndoClicked.RemoveListener(UndoCommand);
+            eventService.OnProcessingReward.RemoveListener(ClearHistory);
         }
 
         public void AddCommand(ICommand command)
