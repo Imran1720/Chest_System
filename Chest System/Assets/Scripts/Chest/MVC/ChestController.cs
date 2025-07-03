@@ -74,10 +74,10 @@ namespace ChestSystem.Chest
             ChestData chestData = chestModel.GetChestData();
             chestView.SetState(currentState);
 
-            int timer = chestData.openDurationInMinutes * 60;
+            int timer = chestData.openDuration * 60;
             chestView.SetTimer(CalculateHours(timer), CalculateMinutes(timer));
 
-            Sprite icon = GetChestIcon(GetCurrentChestState());
+            Sprite icon = chestData.chestIcon;
             chestView.SetChestIcon(icon);
             chestView.SetOpeningCost(CalculateChestBuyingCost(timer));
         }
@@ -133,18 +133,6 @@ namespace ChestSystem.Chest
             return gemsRequired;
         }
 
-        private Sprite GetChestIcon(EChestState state)
-        {
-            switch (state)
-            {
-                case EChestState.UNLOCKED:
-                    return chestModel.GetChestUnlockedIcon();
-                case EChestState.UNLOCKING:
-                    return chestModel.GetChestUnlockingIcon();
-                default:
-                    return chestModel.GetChestLockedIcon();
-            }
-        }
         private void CalculateCoinsToBeRewarded()
         {
             int minimumcoinLimit = chestModel.GetMinCoinsRewarded();

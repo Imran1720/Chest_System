@@ -1,6 +1,5 @@
 using ChestSystem.Core;
 using ChestSystem.Events;
-using ChestSystem.UI;
 using ChestSystem.UI.Slot;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,20 +23,18 @@ namespace ChestSystem.Chest
         {
             this.chestSO = chestSO;
             this.chestPrefab = chestPrefab;
-            InitializeSevices(gameService);
 
             chestPool = new ChestPool(chestPrefab, gameService);
 
+            InitializeServices(gameService);
             AddEventListeners();
         }
 
-        private void InitializeSevices(GameService gameService)
+        private void InitializeServices(GameService gameService)
         {
             slotService = gameService.GetSlotService();
             eventService = gameService.GetEventService();
         }
-
-        private void AddEventListeners() => eventService.OnRewardCollected.AddListener(ReturnChestToPool);
 
         public void CreateChest(SlotData slotData)
         {
@@ -61,16 +58,26 @@ namespace ChestSystem.Chest
 
         public void Update()
         {
-            foreach (var controller in chestControllersList)
+            foreach (ChestController controller in chestControllersList)
             {
                 controller?.Update();
             }
         }
 
-        public bool CanUnlockChest() => !isUnlockingChest;
-        public void SetIsChestUnlocking(bool value) => isUnlockingChest = value;
-        private ChestData GetRandomChest() => chestSO.ChestTypeList[GetRandomIndex()];
-        private int GetRandomIndex() => Random.Range(0, chestSO.ChestTypeList.Length);
+        public bool IsChestUnlocking()
+        {
+            ChestController controller = chestControllersList.Find(chest => chest.GetCurrentChestState().Equals(EChestState.UNLOCKING));
+            isUnlockingChest = controller != null;
+            return isUnlockingChest;
+        }
+
+        private void AddEventListeners() => eventService.OnRewardCollected.AddListener(ReturnChestToPool);
+        public void RemoveEventListeners() => eventService.OnRewardCollected.RemoveListener(ReturnChestToPool);
+
         public void ReturnChestToPool(ChestController controller) => chestPool.ReturnChest(controller);
+
+        private ChestData GetRandomChest() => chestSO.ChestTypeList[GetRandomIndex()];
+
+        private int GetRandomIndex() => Random.Range(0, chestSO.ChestTypeList.Length);
     }
 }

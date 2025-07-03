@@ -28,12 +28,9 @@ namespace ChestSystem.Chest
 
         public void OnStateEntered()
         {
-            gameService.SetIsChestUnlocking(true);
             ChestController.SetLockedUI(true);
             timer = ChestController.GetChestOpenDuration() * 60;
         }
-
-        public void OnStateExited() => gameService.SetIsChestUnlocking(false);
 
         public void Update()
         {
@@ -59,6 +56,7 @@ namespace ChestSystem.Chest
 
         public void OnChestSelected() => eventService.OnUnlockingChestClicked.InvokeEvent(ChestController);
 
+        public void OnStateExited() { }
         public int GetChestBuyingCost() => ChestController.CalculateChestBuyingCost(timer);
     }
 }

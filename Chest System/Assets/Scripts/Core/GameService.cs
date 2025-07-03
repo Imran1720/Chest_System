@@ -61,11 +61,11 @@ namespace ChestSystem.Core
         {
             playerService.RemoveEventListeners();
             commandInvoker.RemoveEventListeners();
+            chestService.RemoveEventListeners();
         }
 
         //Chest Unlock Limit Logic
-        public bool CanUnlockChest() => chestService.CanUnlockChest();
-        public void SetIsChestUnlocking(bool value) => chestService.SetIsChestUnlocking(value);
+        public bool CanUnlockChest() => !chestService.IsChestUnlocking();
 
         //Service Getters
         public SoundService GetSoundService() => soundService;

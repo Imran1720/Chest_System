@@ -18,16 +18,14 @@ namespace ChestSystem.Chest
         public int GetMaxCoinsRewarded() => data.maxCoinsRewarded;
         public int GetMinGemsRewarded() => data.minGemsRewarded;
         public int GetMaxGemsRewarded() => data.maxGemsRewarded;
-        public int GetOpenDuration() => data.openDurationInMinutes;
+        public int GetOpenDuration() => data.openDuration;
         public int GetCoinsToBeRewarded() => coinsToBeRewarded;
         public int GetGemsToBeRewarded() => gemsToBeRewarded;
 
         public void SetCoinsToBeRewarded(int amount) => coinsToBeRewarded = amount;
         public void SetGemsToBeRewarded(int amount) => gemsToBeRewarded = amount;
         public EChestType GetChesRarity() => data.chestRarity;
-        public Sprite GetChestLockedIcon() => data.chestLockedIcon;
-        public Sprite GetChestUnlockedIcon() => data.chestUnlockedIcon;
-        public Sprite GetChestUnlockingIcon() => data.chestUnlockingIcon;
+        public Sprite GetChestLockedIcon() => data.chestIcon;
         public ChestData GetChestData() => data;
     }
 }
