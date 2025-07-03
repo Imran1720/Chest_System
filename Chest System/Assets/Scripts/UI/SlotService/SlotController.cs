@@ -36,7 +36,7 @@ namespace ChestSystem.UI.Slot
 
         public bool IsEmptySlotAvailable() => GetEmptySlotCount() > 0;
 
-        public SlotData GetEmptySlot() => slotList.Find(slot => slot.isSlotEmpty());
+        public SlotData GetEmptySlot() => slotList.Find(slot => slot.IsSlotEmpty());
 
         public void AddEmptySlot()
         {
@@ -61,7 +61,7 @@ namespace ChestSystem.UI.Slot
             int count = 0;
             foreach (SlotData slot in slotList)
             {
-                if (slot.isSlotEmpty()) count++;
+                if (slot.IsSlotEmpty()) count++;
             }
             return count;
         }

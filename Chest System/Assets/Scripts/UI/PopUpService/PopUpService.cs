@@ -20,9 +20,8 @@ namespace ChestSystem.UI.PopUp
         [SerializeField] private Button buyWithGemButton;
         [SerializeField] private Button closePopUpButton;
 
-        [Header("Message Text")]
+        [Header("UI Text")]
         [SerializeField] private TextMeshProUGUI warningMessageText;
-
         [SerializeField] private TextMeshProUGUI openingCostText;
 
         [Header("Scriptable Object")]
@@ -113,7 +112,6 @@ namespace ChestSystem.UI.PopUp
         {
             int gemsCount = chestController.GetGemsToBeRewarded();
             int coinsCount = chestController.GetCoinsToBeRewarded();
-
             ShowWarningPopUp($"You Got \n{coinsCount} Coins & {gemsCount} Gems!!");
         }
 
