@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace ChestSystem.Chest
 {
     public class ChestModel
@@ -14,18 +12,22 @@ namespace ChestSystem.Chest
             this.data = data;
         }
 
-        public int GetMinCoinsRewarded() => data.minCoinsRewarded;
-        public int GetMaxCoinsRewarded() => data.maxCoinsRewarded;
+        public int GetOpenDuration() => data.openDuration;
+
+        public int GetGemsToBeRewarded() => gemsToBeRewarded;
+        public int GetCoinsToBeRewarded() => coinsToBeRewarded;
+
         public int GetMinGemsRewarded() => data.minGemsRewarded;
         public int GetMaxGemsRewarded() => data.maxGemsRewarded;
-        public int GetOpenDuration() => data.openDuration;
-        public int GetCoinsToBeRewarded() => coinsToBeRewarded;
-        public int GetGemsToBeRewarded() => gemsToBeRewarded;
 
-        public void SetCoinsToBeRewarded(int amount) => coinsToBeRewarded = amount;
+        public int GetMinCoinsRewarded() => data.minCoinsRewarded;
+        public int GetMaxCoinsRewarded() => data.maxCoinsRewarded;
+
         public void SetGemsToBeRewarded(int amount) => gemsToBeRewarded = amount;
-        public EChestType GetChesRarity() => data.chestRarity;
-        public Sprite GetChestLockedIcon() => data.chestIcon;
+        public void SetCoinsToBeRewarded(int amount) => coinsToBeRewarded = amount;
+
         public ChestData GetChestData() => data;
+
+        public EChestType GetChestRarity() => data.chestRarity;
     }
 }

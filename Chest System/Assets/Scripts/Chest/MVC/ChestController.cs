@@ -181,7 +181,7 @@ namespace ChestSystem.Chest
         public void SetViewInactive() => chestView.gameObject.SetActive(false);
 
         public void EmptyCurrentSlot() => slotService.EmptySlot(slotData);
-        public EChestType GetChestRarity() => chestModel.GetChesRarity();
+        public EChestType GetChestRarity() => chestModel.GetChestRarity();
 
         public void SwitchSlot(SlotData slotData)
         {
@@ -221,6 +221,7 @@ namespace ChestSystem.Chest
                 SetViewInactive();
             }
         }
+
         public SlotData GetCurrentSlot() => slotData;
     }
 }
