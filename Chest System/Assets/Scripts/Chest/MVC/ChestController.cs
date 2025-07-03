@@ -206,7 +206,7 @@ namespace ChestSystem.Chest
         public bool CanBuyChest()
         {
             int requiredGems = GetChestBuyingCost();
-            return playerService.HasSufficientGemss(requiredGems);
+            return playerService.HasSufficientGems(requiredGems);
         }
 
         public int GetChestBuyingCost() => chestStateMachine.GetChestBuyingCost();
@@ -229,7 +229,7 @@ namespace ChestSystem.Chest
         {
             if (controller == this)
             {
-                eventService.OnProcessingReward.InvokeEvent();
+                eventService.OnRewardProcessing.InvokeEvent();
                 SetViewInactive();
             }
         }

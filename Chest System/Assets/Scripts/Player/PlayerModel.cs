@@ -1,4 +1,3 @@
-using ChestSystem.Core;
 using ChestSystem.Events;
 
 namespace ChestSystem.Player
@@ -7,6 +6,7 @@ namespace ChestSystem.Player
     {
         private int coinCount;
         private int gemCount;
+
         private EventService eventService;
 
         public PlayerModel(int initialCoinCount, int initialGemCount, EventService eventService)
@@ -21,17 +21,19 @@ namespace ChestSystem.Player
             coinCount = count;
             UpdateData();
         }
+
         public void SetGemCount(int count)
         {
             gemCount = count;
             UpdateData();
         }
 
-        public void UpdateData() => eventService.OnCurrencyUpdated.InvokeEvent();
-        public int GetCoinCount() => coinCount;
         public int GetGemCount() => gemCount;
+        public int GetCoinCount() => coinCount;
 
-        public void AddCoins(int amount) => SetCoinCount(coinCount + amount);
         public void AddGems(int amount) => SetGemCount(gemCount + amount);
+        public void AddCoins(int amount) => SetCoinCount(coinCount + amount);
+
+        private void UpdateData() => eventService.OnCurrencyUpdated.InvokeEvent();
     }
 }

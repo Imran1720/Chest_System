@@ -59,6 +59,7 @@ namespace ChestSystem.Core
 
         private void OnDisable()
         {
+            playerService.RemoveEventListeners();
             commandInvoker.RemoveEventListeners();
         }
 

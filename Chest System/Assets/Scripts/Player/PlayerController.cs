@@ -1,57 +1,55 @@
-using ChestSystem.UI;
-using System.Diagnostics;
+using ChestSystem.Chest;
+using ChestSystem.Events;
+using UnityEngine;
 
 namespace ChestSystem.Player
 {
     public class PlayerController
     {
         private PlayerModel playerModel;
+        private EventService eventService;
 
-        public PlayerController(PlayerModel playerModel)
+        public PlayerController(PlayerModel playerModel, EventService eventService)
         {
             this.playerModel = playerModel;
-        }
+            this.eventService = eventService;
 
-        public void IncrementPlayerCoinsBy(int value)
-        {
-            int currentPlayerCoins = playerModel.GetCoinCount();
-            playerModel.SetCoinCount(currentPlayerCoins + value);
-        }
-
-        public void IncrementPlayerGemsBy(int value)
-        {
-            int currentPlayerGems = playerModel.GetGemCount();
-            playerModel.SetGemCount(currentPlayerGems + value);
-        }
-
-        public void DecrementPlayerCoinsBy(int value)
-        {
-            int currentPlayerCoins = playerModel.GetCoinCount();
-            currentPlayerCoins -= value;
-            currentPlayerCoins = (currentPlayerCoins <= 0) ? 0 : currentPlayerCoins;
-
-            playerModel.SetCoinCount(currentPlayerCoins);
+            AddEventListeners();
         }
 
         public void DecrementPlayerGemsBy(int value)
         {
-            int currentPlayerGems = playerModel.GetGemCount();
-            currentPlayerGems -= value;
-            currentPlayerGems = (currentPlayerGems <= 0) ? 0 : currentPlayerGems;
-
-            playerModel.SetGemCount(currentPlayerGems);
+            int currentPlayerGems = playerModel.GetGemCount() - value;
+            playerModel.SetGemCount(Mathf.Max(0, currentPlayerGems));
         }
 
-        public bool HasSufficientCoins(int amount) => playerModel.GetCoinCount() >= amount;
-        public bool HasSufficientGems(int amount) => playerModel.GetGemCount() >= amount;
-
-        public int GetCoinCount() => playerModel.GetCoinCount();
-        public int GetGemCount() => playerModel.GetGemCount();
+        public void DecrementPlayerCoinsBy(int value)
+        {
+            int currentPlayerCoins = playerModel.GetCoinCount() - value;
+            playerModel.SetCoinCount(Mathf.Max(0, currentPlayerCoins));
+        }
 
         public void RewardPlayer(int coins, int gems)
         {
-            playerModel.AddCoins(coins);
             playerModel.AddGems(gems);
+            playerModel.AddCoins(coins);
         }
+
+        private void OnRewardPlayer(ChestController controller)
+        {
+            RewardPlayer(controller.GetCoinsToBeRewarded(), controller.GetGemsToBeRewarded());
+        }
+
+        public int GetGemCount() => playerModel.GetGemCount();
+        public int GetCoinCount() => playerModel.GetCoinCount();
+
+        public bool HasSufficientGems(int amount) => playerModel.GetGemCount() >= amount;
+        public bool HasSufficientCoins(int amount) => playerModel.GetCoinCount() >= amount;
+
+        private void AddEventListeners() => eventService.OnRewardCollected.AddListener(OnRewardPlayer);
+        public void RemoveEventListeners() => eventService.OnRewardCollected.RemoveListener(OnRewardPlayer);
+
+        public void IncrementPlayerGemsBy(int value) => playerModel.SetGemCount(playerModel.GetGemCount() + value);
+        public void IncrementPlayerCoinsBy(int value) => playerModel.SetCoinCount(playerModel.GetCoinCount() + value);
     }
 }

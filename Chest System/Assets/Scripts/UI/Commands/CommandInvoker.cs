@@ -19,13 +19,13 @@ namespace ChestSystem.Chest
         private void AddEventListeners()
         {
             eventService.OnUndoClicked.AddListener(UndoCommand);
-            eventService.OnProcessingReward.AddListener(ClearHistory);
+            eventService.OnRewardProcessing.AddListener(ClearHistory);
         }
 
         public void RemoveEventListeners()
         {
             eventService.OnUndoClicked.RemoveListener(UndoCommand);
-            eventService.OnProcessingReward.RemoveListener(ClearHistory);
+            eventService.OnRewardProcessing.RemoveListener(ClearHistory);
         }
 
         public void AddCommand(ICommand command)
