@@ -1,54 +1,22 @@
-using ChestSystem.Core;
-using ChestSystem.Player;
-using ChestSystem.UI;
-using ChestSystem.UI.PopUp;
-using ChestSystem.UI.Slot;
-
+using ChestSystem.Events;
 namespace ChestSystem.Chest
 {
     public class BuyChestCommand : ICommand
     {
         private ChestController chestController;
+        private EventService eventService;
 
-        private PopUpService popUpService;
-        private PlayerService playerService;
-        private UIService uiService;
-
-        int requiredGems;
-
-        public BuyChestCommand(ChestController chestController, GameService gameService)
+        public BuyChestCommand(ChestController chestController, EventService eventService)
         {
             this.chestController = chestController;
-            InitializeServices(GameService.Instance);
-        }
-
-        private void InitializeServices(GameService gameService)
-        {
-            popUpService = gameService.GetPopUpService();
-            playerService = gameService.GetPlayerService();
-            uiService = gameService.GetUIService();
+            this.eventService = eventService;
         }
 
         public void Execute()
         {
-            requiredGems = chestController.GetChestBuyingCost();
-            if (playerService.HasSufficientGemss(requiredGems))
-            {
-                chestController.OpenWithGems();
-                playerService.DecrementGemsBy(requiredGems);
-                uiService.UpdateCurrencies();
-                popUpService.ClosePopUp();
-            }
-            else
-            {
-                popUpService.ShowInsufficientFundPopUP();
-            }
+            eventService.OnChestBought.InvokeEvent(chestController);
         }
 
-        public void Undo()
-        {
-            chestController.Reset();
-            playerService.IncrementGemsBy(requiredGems);
-        }
+        public void Undo() => eventService.OnProcessingUndo.InvokeEvent(chestController);
     }
 }

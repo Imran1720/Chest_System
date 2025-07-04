@@ -1,5 +1,6 @@
 using ChestSystem.Chest;
 using ChestSystem.Core;
+using ChestSystem.Events;
 using System;
 using TMPro;
 using UnityEngine;
@@ -27,10 +28,32 @@ namespace ChestSystem.UI.PopUp
 
         private ChestController chestController;
         private CommandInvoker commandInvoker;
+        private EventService eventService;
 
         private void Start()
         {
             InitializeButtonListeners();
+        }
+
+        public void InitializeServices(GameService gameService)
+        {
+            eventService = gameService.GetEventService();
+            AddListeners();
+        }
+
+        private void AddListeners()
+        {
+            eventService.OnInsufficientFunds.AddListener(OnInsufficientFunds);
+            eventService.OnChestBought.AddListener(OnChestBought);
+            eventService.OnLockedChestClicked.AddListener(OnLockedChestedClicked);
+            eventService.OnUnlockingChestClicked.AddListener(OnUnlockingChestClicked);
+        }
+        private void OnDisable()
+        {
+            eventService.OnInsufficientFunds.RemoveListener(OnInsufficientFunds);
+            eventService.OnChestBought.RemoveListener(OnChestBought);
+            eventService.OnLockedChestClicked.RemoveListener(OnLockedChestedClicked);
+            eventService.OnUnlockingChestClicked.RemoveListener(OnUnlockingChestClicked);
         }
 
         public void SetCommandInvoker(CommandInvoker commandInvoker) => this.commandInvoker = commandInvoker;
@@ -45,6 +68,7 @@ namespace ChestSystem.UI.PopUp
         private void HidePopUp() => popUpObject.SetActive(false);
         private void ShowPopUp()
         {
+            ClosePopUp();
             backgroundImage.enabled = true;
             popUpObject.SetActive(true);
             closePopUpButton.gameObject.SetActive(true);
@@ -70,7 +94,6 @@ namespace ChestSystem.UI.PopUp
 
         public void ShowSlotsFullPopUP()
         {
-            ClosePopUp();
             ShowPopUp();
             string warning = "Chest Slots Full!!";
             warningMessageText.text = warning;
@@ -79,7 +102,6 @@ namespace ChestSystem.UI.PopUp
 
         public void ShowChestOpeningPopUP()
         {
-            ClosePopUp();
             ShowPopUp();
             string warning = "Already chest is opening!!";
             warningMessageText.text = warning;
@@ -88,8 +110,6 @@ namespace ChestSystem.UI.PopUp
 
         public void ShowInsufficientFundPopUP()
         {
-            ClosePopUp();
-
             ShowPopUp();
             string warning = "Insufficient Funds!!";
             warningMessageText.text = warning;
@@ -114,10 +134,26 @@ namespace ChestSystem.UI.PopUp
 
         private void BuyWithGems()
         {
-            ICommand buyCommand = new BuyChestCommand(chestController, GameService.Instance);
+            ICommand buyCommand = new BuyChestCommand(chestController, eventService);
             commandInvoker.AddCommand(buyCommand);
         }
 
         public void ClosePopUp() => ResetPopUp();
+
+        private void OnInsufficientFunds() => ShowInsufficientFundPopUP();
+        private void OnChestBought(ChestController controller) => ClosePopUp();
+
+        private void OnLockedChestedClicked(ChestController controller)
+        {
+            if (controller.CanUnlockChest())
+            {
+                ShowUnlockPopUP(controller);
+            }
+            else
+            {
+                ShowChestOpeningPopUP();
+            }
+        }
+        private void OnUnlockingChestClicked(ChestController controller) => ShowBuyPopUP(controller);
     }
 }

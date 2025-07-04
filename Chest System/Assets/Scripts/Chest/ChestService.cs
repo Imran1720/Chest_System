@@ -1,4 +1,5 @@
 using ChestSystem.Core;
+using ChestSystem.Events;
 using ChestSystem.UI;
 using ChestSystem.UI.Slot;
 using System.Collections.Generic;
@@ -12,30 +13,36 @@ namespace ChestSystem.Chest
         private ChestPool chestPool;
         private ChestView chestPrefab;
 
-        private UIService uiService;
         private SlotService slotService;
+        private EventService eventService;
 
         private bool isUnlockingChest = false;
 
         private List<ChestController> chestControllersList = new List<ChestController>();
 
-        public ChestService(ChestSO chestSO, ChestView chestPrefab)
+        public ChestService(ChestSO chestSO, ChestView chestPrefab, GameService gameService)
         {
             this.chestSO = chestSO;
             this.chestPrefab = chestPrefab;
+            InitializeSevices(gameService);
 
-            chestPool = new ChestPool(chestPrefab, uiService);
+            chestPool = new ChestPool(chestPrefab, gameService);
+
+            AddEventListeners();
         }
 
-        public void InitializeSevices(GameService gameService)
+        private void InitializeSevices(GameService gameService)
         {
-            uiService = gameService.GetUIService();
-            slotService = uiService.GetSlotService();
+            slotService = gameService.GetSlotService();
+            eventService = gameService.GetEventService();
         }
+
+        private void AddEventListeners() => eventService.OnRewardCollected.AddListener(ReturnChestToPool);
 
         public void CreateChest(SlotData slotData)
         {
             chestPool.SetSlotData(slotData);
+            slotService.FillSlot(slotData);
 
             ChestController controller = chestPool.GetChest(GetRandomChest());
             if (!IsSimilarTypeOfControllerAvailable(controller))
@@ -43,7 +50,6 @@ namespace ChestSystem.Chest
                 chestControllersList.Add(controller);
             }
 
-            slotService.FillSlot(slotData);
             controller.SetViewActive();
         }
 

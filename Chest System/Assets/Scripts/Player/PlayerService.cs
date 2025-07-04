@@ -1,3 +1,5 @@
+using ChestSystem.Chest;
+using ChestSystem.Events;
 using ChestSystem.UI;
 using UnityEngine;
 namespace ChestSystem.Player
@@ -5,10 +7,14 @@ namespace ChestSystem.Player
     public class PlayerService
     {
         PlayerController playerController;
-        public PlayerService(int initialCoinCount, int initalGemCount, UIService uiService)
+        EventService eventService;
+        public PlayerService(int initialCoinCount, int initalGemCount, EventService eventService)
         {
+            this.eventService = eventService;
             PlayerModel playerModel = new PlayerModel(initialCoinCount, initalGemCount);
-            playerController = new PlayerController(playerModel, uiService);
+            playerController = new PlayerController(playerModel);
+
+            eventService.OnRewardCollected.AddListener(RewardPlayer);
         }
 
         public bool HasSufficientCoins(int value) => playerController.HasSufficientCoins(value);
@@ -23,6 +29,7 @@ namespace ChestSystem.Player
         public void DecrementCoinsBy(int value) => playerController.DecrementPlayerCoinsBy(value);
         public void DecrementGemsBy(int value) => playerController.DecrementPlayerGemsBy(value);
 
-        public void RewardPlayer(int coins, int gems) => playerController.RewardPlayer(coins, gems);
+        //public void RewardPlayer(int coins, int gems) => playerController.RewardPlayer(coins, gems);
+        public void RewardPlayer(ChestController controller) => playerController.RewardPlayer(controller.GetCoinsToBeRewarded(), controller.GetGemsToBeRewarded());
     }
 }

@@ -1,3 +1,6 @@
+using ChestSystem.Chest;
+using ChestSystem.Core;
+using ChestSystem.Events;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,15 +12,18 @@ namespace ChestSystem.UI.Slot
         private List<SlotData> slotList;
 
         private GameObject slotsContainer;
+        private EventService eventService;
 
-        public SlotController(SlotData slotPrefab, GameObject slotsContainer, int initialSlotsCount)
+        public SlotController(SlotData slotPrefab, GameObject slotsContainer, int initialSlotsCount, EventService eventService)
         {
             this.slotPrefab = slotPrefab;
             this.slotsContainer = slotsContainer;
+            this.eventService = eventService;
 
             slotList = new List<SlotData>();
-
             SpawnInitialSlots(initialSlotsCount);
+
+            eventService.OnRewardCollected.AddListener(OnRewardCollected);
         }
 
         private void SpawnInitialSlots(int numberOfSlots)
@@ -59,5 +65,8 @@ namespace ChestSystem.UI.Slot
             }
             return count;
         }
+
+        private void OnRewardCollected(ChestController controller) => EmptySlot(controller.GetCurrentSlot());
+
     }
 }
