@@ -1454,6 +1454,7 @@ MonoBehaviour:
   buyWithGemButton: {fileID: 5209239539291508138}
   closePopUpButton: {fileID: 5209239538426816266}
   warningMessageText: {fileID: 5209239539675117761}
+  openingCostText: {fileID: 5209239539396767357}
 --- !u!1 &5209239539675117767
 GameObject:
   m_ObjectHideFlags: 0

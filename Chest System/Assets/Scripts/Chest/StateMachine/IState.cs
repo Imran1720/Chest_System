@@ -7,6 +7,7 @@ namespace ChestSystem.Chest
         public void Update();
         public void OnStateExited();
         public void OnClick();
+        public int GetChestBuyingCost();
 
     }
 }

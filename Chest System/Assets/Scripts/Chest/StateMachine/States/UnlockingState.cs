@@ -33,7 +33,6 @@ namespace ChestSystem.Chest
         public void Update()
         {
             timer -= Time.deltaTime;
-            Debug.Log((int)timer);
             if (CanUpdateCost())
             {
                 ChestController.UpdateCost(timer);
@@ -56,6 +55,12 @@ namespace ChestSystem.Chest
         public void OnClick()
         {
             // pop up to buy with gems
+            UIService.Instance.GetPopUpService().ShowBuyPopUP(ChestController);
+        }
+
+        public int GetChestBuyingCost()
+        {
+            return ChestController.CalculateChestBuyingCost(timer);
         }
     }
 }

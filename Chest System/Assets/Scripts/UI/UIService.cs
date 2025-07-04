@@ -57,7 +57,7 @@ namespace ChestSystem.UI
 
         private void InitializeSevices()
         {
-            playerService = new PlayerService(100, 100);
+            playerService = new PlayerService(3, 3);
             slotService = new SlotService(slotPrefab, slotContainer, initialSlotCount);
             chestService = new ChestService(chestSO, chestPrefab);
             popUpService = Instantiate(popUpServicePrefab);
@@ -97,6 +97,7 @@ namespace ChestSystem.UI
         {
             if (!slotService.IsEmptySlotAvailable())
             {
+                popUpService.ShowSlotsFullPopUP();
                 return;
             }
 
@@ -106,5 +107,8 @@ namespace ChestSystem.UI
         }
 
         public ChestService GetChestService() => chestService;
+        public PopUpService GetPopUpService() => popUpService;
+        public PlayerService GetPlayerService() => playerService;
+        public SlotService GetSlotService() => slotService;
     }
 }

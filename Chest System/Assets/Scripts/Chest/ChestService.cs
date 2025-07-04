@@ -1,3 +1,4 @@
+using ChestSystem.UI;
 using ChestSystem.UI.Slot;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,6 +31,8 @@ namespace ChestSystem.Chest
             {
                 chestControllersList.Add(controller);
             }
+            UIService.Instance.GetSlotService().FillSlot(slotData);
+
             controller.SetViewActive();
         }
 
@@ -44,7 +47,7 @@ namespace ChestSystem.Chest
         private ChestData GetRandomChest()
         {
             int randomChestIndex = Random.Range(0, chestSO.ChestTypeList.Length);
-            return chestSO.ChestTypeList[0];
+            return chestSO.ChestTypeList[randomChestIndex];
         }
 
         public bool CanUnlockChest() => isUnlockingChest;

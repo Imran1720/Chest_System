@@ -1,3 +1,4 @@
+using ChestSystem.Chest;
 using System;
 using TMPro;
 using UnityEngine;
@@ -21,7 +22,9 @@ namespace ChestSystem.UI.PopUp
         [Header("MESSAGE")]
         [SerializeField] private TextMeshProUGUI warningMessageText;
 
+        [SerializeField] private TextMeshProUGUI openingCostText;
 
+        private ChestController chestController;
         private void Start()
         {
             InitializeButtonListeners();
@@ -42,16 +45,44 @@ namespace ChestSystem.UI.PopUp
             closePopUpButton.gameObject.SetActive(true);
         }
 
-        public void ShowBuyPopUP()
+        public void ShowUnlockPopUP(ChestController controller)
         {
+            chestController = controller;
+            startTimerButton.gameObject.SetActive(true);
+            openingCostText.text = (chestController.GetChestBuyingCost()).ToString();
             ShowPopUp();
             buyPopUpBox.SetActive(true);
         }
 
-        public void ShowWarningPopUP()
+        public void ShowBuyPopUP(ChestController controller)
+        {
+            chestController = controller;
+            openingCostText.text = (chestController.GetChestBuyingCost()).ToString();
+            ShowPopUp();
+            buyPopUpBox.SetActive(true);
+            startTimerButton.gameObject.SetActive(false);
+        }
+
+        public void ShowSlotsFullPopUP()
         {
             ShowPopUp();
-            string warning = "Can not get chest";
+            string warning = "Chest Slots Full!!";
+            warningMessageText.text = warning;
+            warningPopUpBox.SetActive(true);
+        }
+
+        public void ShowChestOpeningPopUP()
+        {
+            ShowPopUp();
+            string warning = "Already chest is opening!!";
+            warningMessageText.text = warning;
+            warningPopUpBox.SetActive(true);
+        }
+
+        public void ShowInsufficientFundPopUP()
+        {
+            ShowPopUp();
+            string warning = "Insufficient Funds!!";
             warningMessageText.text = warning;
             warningPopUpBox.SetActive(true);
         }
@@ -68,12 +99,26 @@ namespace ChestSystem.UI.PopUp
 
         private void StartTimer()
         {
-            Debug.Log("Timer Started!!");
+            chestController.StartTimer();
+            ClosePopUp();
         }
 
         private void BuyWithGems()
         {
-            Debug.Log("Chest Bought!!");
+
+            int requiredGems = chestController.GetChestBuyingCost();
+            if (UIService.Instance.GetPlayerService().HasSufficientGemss(requiredGems))
+            {
+                chestController.OpenWithGems();
+                UIService.Instance.GetPlayerService().DecrementGemsBy(requiredGems);
+                UIService.Instance.UpdateCurrencies();
+                ClosePopUp();
+            }
+            else
+            {
+                ClosePopUp();
+                ShowInsufficientFundPopUP();
+            }
         }
 
         private void ClosePopUp() => ResetPopUp();

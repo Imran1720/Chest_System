@@ -39,5 +39,10 @@ namespace ChestSystem.Chest
         public void ProcessOnClick() => currentState.OnClick();
 
         private IState GetState(EChestState state) => chestStatesList[state];
+
+        public int GetChestBuyingCost()
+        {
+            return currentState.GetChestBuyingCost();
+        }
     }
 }

@@ -16,5 +16,8 @@ namespace ChestSystem.Player
 
         public int GetCoinCount() => coinCount;
         public int GetGemCount() => gemCount;
+
+        public int AddCoins(int amount) => coinCount += amount;
+        public int AddGems(int amount) => gemCount += amount;
     }
 }

@@ -25,11 +25,15 @@ namespace ChestSystem.Chest
 
         public void OnStateExited()
         {
-
+            ChestController.EmptyCurrentSlot();
         }
 
         public void Update()
         {
+        }
+        public int GetChestBuyingCost()
+        {
+            return 0;
         }
     }
 }
