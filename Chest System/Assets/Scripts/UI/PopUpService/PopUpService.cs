@@ -1,7 +1,6 @@
 using ChestSystem.Chest;
 using ChestSystem.Core;
 using ChestSystem.Events;
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,25 +9,27 @@ namespace ChestSystem.UI.PopUp
 {
     public class PopUpService : MonoBehaviour
     {
-        [Header("POPUP-BOX")]
+        [Header("PopUp Box")]
         [SerializeField] private GameObject buyPopUpBox;
         [SerializeField] private GameObject warningPopUpBox;
         [SerializeField] private GameObject popUpObject;
         [SerializeField] private Image backgroundImage;
 
-        [Header("BUTTONS")]
+        [Header("Buttons")]
         [SerializeField] private Button startTimerButton;
         [SerializeField] private Button buyWithGemButton;
         [SerializeField] private Button closePopUpButton;
 
-        [Header("MESSAGE")]
+        [Header("UI Text")]
         [SerializeField] private TextMeshProUGUI warningMessageText;
-
         [SerializeField] private TextMeshProUGUI openingCostText;
 
-        private ChestController chestController;
-        private CommandInvoker commandInvoker;
+        [Header("Scriptable Object")]
+        [SerializeField] private PopUpMessagesSO messagesList;
+
         private EventService eventService;
+        private CommandInvoker commandInvoker;
+        private ChestController chestController;
 
         private void Start()
         {
@@ -38,113 +39,101 @@ namespace ChestSystem.UI.PopUp
         public void InitializeServices(GameService gameService)
         {
             eventService = gameService.GetEventService();
-            AddListeners();
+            AddEventListeners();
         }
 
-        private void AddListeners()
-        {
-            eventService.OnInsufficientFunds.AddListener(OnInsufficientFunds);
-            eventService.OnChestBought.AddListener(OnChestBought);
-            eventService.OnLockedChestClicked.AddListener(OnLockedChestedClicked);
-            eventService.OnUnlockingChestClicked.AddListener(OnUnlockingChestClicked);
-        }
         private void OnDisable()
         {
-            eventService.OnInsufficientFunds.RemoveListener(OnInsufficientFunds);
-            eventService.OnChestBought.RemoveListener(OnChestBought);
-            eventService.OnLockedChestClicked.RemoveListener(OnLockedChestedClicked);
-            eventService.OnUnlockingChestClicked.RemoveListener(OnUnlockingChestClicked);
+            RemoveEventListeners();
         }
 
-        public void SetCommandInvoker(CommandInvoker commandInvoker) => this.commandInvoker = commandInvoker;
+        private void AddEventListeners()
+        {
+            eventService.OnChestBought.AddListener(OnChestBought);
+            eventService.OnRewardCollected.AddListener(ShowRewards);
+            eventService.OnInsufficientFunds.AddListener(OnInsufficientFunds);
+            eventService.OnLockedChestClicked.AddListener(OnLockedChestClicked);
+            eventService.OnUnlockingChestClicked.AddListener(OnUnlockingChestClicked);
+        }
+
+        private void RemoveEventListeners()
+        {
+            eventService.OnChestBought.RemoveListener(OnChestBought);
+            eventService.OnRewardCollected.RemoveListener(ShowRewards);
+            eventService.OnInsufficientFunds.RemoveListener(OnInsufficientFunds);
+            eventService.OnLockedChestClicked.RemoveListener(OnLockedChestClicked);
+            eventService.OnUnlockingChestClicked.RemoveListener(OnUnlockingChestClicked);
+        }
 
         private void InitializeButtonListeners()
         {
             startTimerButton.onClick.AddListener(StartTimer);
-            buyWithGemButton.onClick.AddListener(BuyWithGems);
             closePopUpButton.onClick.AddListener(ClosePopUp);
+            buyWithGemButton.onClick.AddListener(BuyWithGems);
         }
 
-        private void HidePopUp() => popUpObject.SetActive(false);
+        private void ShowChestPurchasePopUp(ChestController controller, bool showStartTimer)
+        {
+            chestController = controller;
+            ShowPopUp();
+            eventService.OnPopUpSoundRequested.InvokeEvent();
+            startTimerButton.gameObject.SetActive(showStartTimer);
+            openingCostText.text = (controller.GetChestBuyingCost()).ToString();
+            buyPopUpBox.SetActive(true);
+        }
+
         private void ShowPopUp()
         {
             ClosePopUp();
-            backgroundImage.enabled = true;
-            popUpObject.SetActive(true);
-            closePopUpButton.gameObject.SetActive(true);
+            SetPopUpElementsActive(true);
         }
 
-        public void ShowUnlockPopUP(ChestController controller)
+        public void ClosePopUp()
         {
-            chestController = controller;
-            startTimerButton.gameObject.SetActive(true);
-            openingCostText.text = (chestController.GetChestBuyingCost()).ToString();
-            ShowPopUp();
-            buyPopUpBox.SetActive(true);
-        }
-
-        public void ShowBuyPopUP(ChestController controller)
-        {
-            chestController = controller;
-            openingCostText.text = (chestController.GetChestBuyingCost()).ToString();
-            ShowPopUp();
-            buyPopUpBox.SetActive(true);
-            startTimerButton.gameObject.SetActive(false);
-        }
-
-        public void ShowSlotsFullPopUP()
-        {
-            ShowPopUp();
-            string warning = "Chest Slots Full!!";
-            warningMessageText.text = warning;
-            warningPopUpBox.SetActive(true);
-        }
-
-        public void ShowChestOpeningPopUP()
-        {
-            ShowPopUp();
-            string warning = "Already chest is opening!!";
-            warningMessageText.text = warning;
-            warningPopUpBox.SetActive(true);
-        }
-
-        public void ShowInsufficientFundPopUP()
-        {
-            ShowPopUp();
-            string warning = "Insufficient Funds!!";
-            warningMessageText.text = warning;
-            warningPopUpBox.SetActive(true);
-        }
-
-        private void ResetPopUp()
-        {
-            closePopUpButton.gameObject.SetActive(false);
+            eventService.OnButtonClickSoundRequested.InvokeEvent();
             buyPopUpBox.SetActive(false);
             warningPopUpBox.SetActive(false);
-            HidePopUp();
-            backgroundImage.enabled = false;
+            SetPopUpElementsActive(false);
         }
 
+        private void SetPopUpElementsActive(bool isActive)
+        {
+            closePopUpButton.gameObject.SetActive(isActive);
+            popUpObject.SetActive(isActive);
+            backgroundImage.enabled = isActive;
+        }
+
+        private void ShowWarningPopUp(string warningText)
+        {
+            ShowPopUp();
+            warningMessageText.text = warningText;
+            warningPopUpBox.SetActive(true);
+        }
+
+        public void ShowRewards(ChestController chestController)
+        {
+            int gemsCount = chestController.GetGemsToBeRewarded();
+            int coinsCount = chestController.GetCoinsToBeRewarded();
+            ShowWarningPopUp($"You Got \n{coinsCount} Coins & {gemsCount} Gems!!");
+        }
 
         private void StartTimer()
         {
+            eventService.OnButtonClickSoundRequested.InvokeEvent();
             chestController.StartTimer();
             ClosePopUp();
         }
 
         private void BuyWithGems()
         {
+            eventService.OnButtonClickSoundRequested.InvokeEvent();
             ICommand buyCommand = new BuyChestCommand(chestController, eventService);
             commandInvoker.AddCommand(buyCommand);
         }
 
-        public void ClosePopUp() => ResetPopUp();
-
-        private void OnInsufficientFunds() => ShowInsufficientFundPopUP();
-        private void OnChestBought(ChestController controller) => ClosePopUp();
-
-        private void OnLockedChestedClicked(ChestController controller)
+        private void OnLockedChestClicked(ChestController controller)
         {
+            eventService.OnPopUpSoundRequested.InvokeEvent();
             if (controller.CanUnlockChest())
             {
                 ShowUnlockPopUP(controller);
@@ -154,6 +143,20 @@ namespace ChestSystem.UI.PopUp
                 ShowChestOpeningPopUP();
             }
         }
+
+        public void SetCommandInvoker(CommandInvoker commandInvoker) => this.commandInvoker = commandInvoker;
+
+        //Event Listeners
+        private void OnInsufficientFunds() => ShowInsufficientFundPopUP();
+        private void OnChestBought(ChestController controller) => ClosePopUp();
         private void OnUnlockingChestClicked(ChestController controller) => ShowBuyPopUP(controller);
+
+        //PopUps      
+        private void ShowUnlockPopUP(ChestController controller) => ShowChestPurchasePopUp(controller, true);
+        private void ShowBuyPopUP(ChestController controller) => ShowChestPurchasePopUp(chestController, false);
+
+        public void ShowSlotsFullPopUP() => ShowWarningPopUp(messagesList.slotFullMessage);
+        private void ShowInsufficientFundPopUP() => ShowWarningPopUp(messagesList.noFundsMessage);
+        private void ShowChestOpeningPopUP() => ShowWarningPopUp(messagesList.chestOpeningMessage);
     }
 }

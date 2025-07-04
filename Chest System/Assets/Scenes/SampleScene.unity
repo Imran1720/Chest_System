@@ -2155,7 +2155,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.5
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2562,7 +2562,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bf30346f15bfde4498738a6c6229deb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UIService: {fileID: 1982645820}
+  uiService: {fileID: 1982645820}
   chestSO: {fileID: 11400000, guid: 3633cf96be6abd64cbb69eb3185f35d7, type: 2}
   chestPrefab: {fileID: -8024142794937928516, guid: c9331b9257eb12a4cbb993f32d90b130, type: 3}
   soundClips: {fileID: 11400000, guid: 670cd0c82e64a9c47a61c37fd7dd8c54, type: 2}

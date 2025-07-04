@@ -13,12 +13,12 @@ namespace ChestSystem.Chest
 
         private EventService eventService;
 
-        public LockedState(ChestStateMachine chestStateMachine, ChestController controller, GameService gameService)
+        public LockedState(ChestStateMachine chestStateMachine, ChestController controller, EventService eventService)
         {
             this.chestStateMachine = chestStateMachine;
             ChestController = controller;
 
-            eventService = gameService.GetEventService();
+            this.eventService = eventService;
         }
 
         public void OnStateEntered()
@@ -27,12 +27,11 @@ namespace ChestSystem.Chest
             ChestController.SetLockedUI(true);
             ChestController.UpdateChestUI(EChestState.LOCKED);
         }
-
-        public void Update() { }
-        public void OnStateExited() { }
-
+        public void OnChestSelected() => eventService.OnLockedChestClicked.InvokeEvent(ChestController);
         public int GetChestBuyingCost() => ChestController.GetDefaultBuyingCost();
-        public void OnClick() => eventService.OnLockedChestClicked.InvokeEvent(ChestController);
+
+        public void OnStateExited() { }
+        public void Update() { }
     }
 }
 

@@ -1,6 +1,5 @@
 using ChestSystem.Core;
 using ChestSystem.Events;
-using ChestSystem.UI;
 using ChestSystem.UI.Slot;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,11 +8,12 @@ namespace ChestSystem.Chest
 {
     public class ChestPool
     {
-        private ChestView chestPrefab;
         private SlotData slotData;
+        private ChestView chestPrefab;
 
         private GameService gameService;
         private EventService eventService;
+
         private List<PooledChest> pooledChestsList = new List<PooledChest>();
 
         public ChestPool(ChestView chestPrefab, GameService gameService)
@@ -21,15 +21,8 @@ namespace ChestSystem.Chest
             this.chestPrefab = chestPrefab;
             this.gameService = gameService;
 
-            InitializeSerivces();
+            InitializeServices();
         }
-
-        private void InitializeSerivces()
-        {
-            eventService = gameService.GetEventService();
-        }
-
-        public void SetSlotData(SlotData slotData) => this.slotData = slotData;
 
         public ChestController GetChest(ChestData chestData)
         {
@@ -39,18 +32,15 @@ namespace ChestSystem.Chest
                 if (pooledChest != null)
                 {
                     SwitchSlot(pooledChest.controller);
-                    pooledChest.controller.ResetChest();
+                    pooledChest.controller.ResetToDefaultState();
+
+                    pooledChest.controller.ResetToDefaultState();
                     pooledChest.isUsed = true;
                     return pooledChest.controller;
                 }
             }
-
             return CreatePooledChest(chestData);
         }
-
-        private void SwitchSlot(ChestController chestController) => chestController.SwitchSlot(slotData);
-
-        private bool IsRequiredChest(ChestData data, ChestController controller) => (data.chestRarity == controller.GetChestRarity());
 
         private ChestController CreatePooledChest(ChestData data)
         {
@@ -66,7 +56,10 @@ namespace ChestSystem.Chest
             return pooledChest.controller;
         }
 
-        private ChestController CreateController(ChestView view, ChestModel model, GameService gameService) => new ChestController(view, model, slotData, gameService);
+        private ChestController CreateController(ChestView view, ChestModel model, GameService gameService)
+        {
+            return new ChestController(view, model, slotData, gameService);
+        }
 
         private ChestView CreateChestView()
         {
@@ -81,5 +74,11 @@ namespace ChestSystem.Chest
             PooledChest pooledChest = pooledChestsList.Find(item => item.controller.Equals(controller));
             pooledChest.isUsed = false;
         }
+
+        public void SetSlotData(SlotData slotData) => this.slotData = slotData;
+        private void InitializeServices() => eventService = gameService.GetEventService();
+        private void SwitchSlot(ChestController chestController) => chestController.SwitchSlot(slotData);
+
+        private bool IsRequiredChest(ChestData data, ChestController controller) => (data.chestRarity == controller.GetChestRarity());
     }
 }

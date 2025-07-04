@@ -8,6 +8,6 @@ namespace ChestSystem.UI.Slot
 
         public void FillSlot() => isUsed = true;
         public void EmptySlot() => isUsed = false;
-        public bool isSlotEmpty() => isUsed == false;
+        public bool IsSlotEmpty() => !isUsed;
     }
 }

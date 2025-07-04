@@ -12,28 +12,23 @@ namespace ChestSystem.Chest
         public ChestController ChestController { get; set; }
         private ChestStateMachine chestStateMachine;
 
-        GameService gameService;
         EventService eventService;
 
         private float timer;
-        private int costUpdateThreshold = 10;
-        public UnlockingState(ChestStateMachine chestStateMachine, ChestController chestController, GameService gameService)
+
+        public UnlockingState(ChestStateMachine chestStateMachine, ChestController chestController, EventService eventService)
         {
             this.chestStateMachine = chestStateMachine;
             ChestController = chestController;
 
-            this.gameService = gameService;
-            eventService = gameService.GetEventService();
+            this.eventService = eventService;
         }
 
         public void OnStateEntered()
         {
-            gameService.SetIsChestUnlocking(true);
             ChestController.SetLockedUI(true);
-            timer = ChestController.GetChestOpenDuration() * 60;
+            timer = ChestController.GetChestOpenDuration();
         }
-
-        public void OnStateExited() => gameService.SetIsChestUnlocking(false);
 
         public void Update()
         {
@@ -50,15 +45,10 @@ namespace ChestSystem.Chest
             }
         }
 
-        private bool CanUpdateCost()
-        {
-            int updateVector = costUpdateThreshold * 60;
+        private bool CanUpdateCost() => (((int)timer % ChestController.GetUpdateInterval()) == 0);
 
-            return (((int)timer % updateVector) == 0);
-        }
-
-        public void OnClick() => eventService.OnUnlockingChestClicked.InvokeEvent(ChestController);
-
-        public int GetChestBuyingCost() => ChestController.CalculateChestBuyingCost(timer);
+        public void OnChestSelected() => eventService.OnUnlockingChestClicked.InvokeEvent(ChestController);
+        public int GetChestBuyingCost() => ChestController.GetChestBuyingCostByTime(timer);
+        public void OnStateExited() { }
     }
 }

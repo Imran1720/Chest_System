@@ -4,7 +4,6 @@ using ChestSystem.Events;
 using ChestSystem.Player;
 using ChestSystem.UI.PopUp;
 using ChestSystem.UI.Slot;
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,22 +15,22 @@ namespace ChestSystem.UI
         private SlotService slotService;
         private PopUpService popUpService;
         private ChestService chestService;
-        private PlayerService playerService;
         private EventService eventService;
+        private PlayerService playerService;
 
-        [Header("PopUp-UI")]
+        [Header("PopUp UI")]
         [SerializeField] private PopUpService popUpServicePrefab;
 
-        [Header("CURRENCY")]
+        [Header("Currency")]
         [SerializeField] private TextMeshProUGUI gemCountText;
         [SerializeField] private TextMeshProUGUI coinCountText;
 
-        [Header("SLOT-DATA")]
+        [Header("Slot Data")]
         [SerializeField] private SlotData slotPrefab;
         [SerializeField] private int initialSlotCount;
         [SerializeField] private GameObject slotContainer;
 
-        [Header("BUTTONS")]
+        [Header("Buttons")]
         [SerializeField] private Button undoButton;
         [SerializeField] private Button addSlotButton;
         [SerializeField] private Button generateChestButton;
@@ -48,21 +47,28 @@ namespace ChestSystem.UI
             generateChestButton.onClick.AddListener(GenerateChest);
         }
 
-        public void CreateSlotService(EventService eventService) => slotService = new SlotService(slotPrefab, slotContainer, initialSlotCount, eventService);
-
-        public void InitializeSevices(GameService gameService)
+        public void CreateSlotService(EventService eventService)
         {
-            chestService = gameService.GetChestService();
+            slotService = new SlotService(slotPrefab, slotContainer, initialSlotCount, eventService);
+        }
+
+        public void InitializeServices(GameService gameService)
+        {
             playerService = gameService.GetPlayerService();
+            chestService = gameService.GetChestService();
             eventService = gameService.GetEventService();
 
-            popUpService = Instantiate(popUpServicePrefab);
-            popUpService.transform.SetParent(transform, false);
-            popUpService.InitializeServices(gameService);
-
+            SetUpPopUpService(gameService);
 
             AddEventListeners();
             UpdateCurrencies();
+        }
+
+        private void SetUpPopUpService(GameService gameService)
+        {
+            popUpService = Instantiate(popUpServicePrefab);
+            popUpService.transform.SetParent(transform, false);
+            popUpService.InitializeServices(gameService);
         }
 
         private void AddEventListeners()
@@ -70,8 +76,10 @@ namespace ChestSystem.UI
             eventService.OnChestBought.AddListener(OnChestBought);
             eventService.OnCurrencyUpdated.AddListener(OnCurrencyUpdated);
         }
+
         private void OnDisable()
         {
+            slotService.RemoveEventListeners();
             eventService.OnChestBought.RemoveListener(OnChestBought);
             eventService.OnCurrencyUpdated.RemoveListener(OnCurrencyUpdated);
         }
@@ -82,15 +90,9 @@ namespace ChestSystem.UI
             UpdateGemCount();
         }
 
-        private void AddSlot() => slotService.AddEmptySlot();
-        private void UndoPurchase() => eventService.OnUndoClicked.InvokeEvent();
-        private void UpdateGemCount() => gemCountText.text = playerService.GetGemCount().ToString();
-        private void UpdateCoinCount() => coinCountText.text = playerService.GetCoinCount().ToString();
-
-
-        private void OnChestBought(ChestController controller) => UpdateCurrencies();
         private void GenerateChest()
         {
+            eventService.OnButtonClickSoundRequested.InvokeEvent();
             if (!slotService.IsEmptySlotAvailable())
             {
                 popUpService.ShowSlotsFullPopUP();
@@ -100,10 +102,22 @@ namespace ChestSystem.UI
             SlotData slotData = slotService.GetEmptySlot();
             chestService.CreateChest(slotData);
         }
-
-        public void OnCurrencyUpdated() => UpdateCurrencies();
+        private void AddSlot()
+        {
+            eventService.OnButtonClickSoundRequested.InvokeEvent();
+            slotService.AddEmptySlot();
+        }
+        private void UndoPurchase()
+        {
+            eventService.OnButtonClickSoundRequested.InvokeEvent();
+            eventService.OnUndoClicked.InvokeEvent();
+        }
 
         public SlotService GetSlotService() => slotService;
+        public void OnCurrencyUpdated() => UpdateCurrencies();
         public PopUpService GetPopUpService() => popUpService;
+        private void OnChestBought(ChestController controller) => UpdateCurrencies();
+        private void UpdateGemCount() => gemCountText.text = playerService.GetGemCount().ToString();
+        private void UpdateCoinCount() => coinCountText.text = playerService.GetCoinCount().ToString();
     }
 }
