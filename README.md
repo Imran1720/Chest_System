@@ -1,6 +1,10 @@
 # Chest System
 Replicating Chest System inspired by Clash Royale game.
 
+## Gameplay 
+[Gameplay Link](https://drive.google.com/file/d/1va_4fMDXXgKjs8tfSp1d18XGlwfCGrzz/view?usp=sharing)
+
+
 ## Design Patterns Used:
 <ol>
   <li><b>MVC: </b> Used in <b>Player</b> and <b>Chest</b> mechanics.</li>
@@ -17,8 +21,10 @@ Replicating Chest System inspired by Clash Royale game.
   <li><b>Dependency Injection:</b> Used to <b>set services</b> in the scripts where corresponding services are required.</li>
 </ol>
 
+
 ## UI Design
 ![Image](https://github.com/Imran1720/Chest_System/blob/60789748e9f7a4b047790e86511f73134b20dfc4/Design/Chest%20System%20UI.png)
+
 
 ## UML Diagram
 https://miro.com/app/board/uXjVIl2xyMs=/?share_link_id=506075442137
