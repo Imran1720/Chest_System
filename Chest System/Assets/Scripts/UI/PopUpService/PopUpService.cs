@@ -114,7 +114,7 @@ namespace ChestSystem.UI.PopUp
         {
             int gemsCount = chestController.GetGemsToBeRewarded();
             int coinsCount = chestController.GetCoinsToBeRewarded();
-            ShowWarningPopUp($"You Got \n{coinsCount} Coins & {gemsCount} Gems!!");
+            ShowWarningPopUp($"You Recieved \n{coinsCount} Coins\n {gemsCount} Gems!!");
         }
 
         private void StartTimer()

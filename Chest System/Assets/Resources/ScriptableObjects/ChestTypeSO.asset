@@ -13,31 +13,31 @@ MonoBehaviour:
   m_Name: ChestTypeSO
   m_EditorClassIdentifier: 
   ChestTypeList:
-  - chestIcon: {fileID: 0}
+  - chestIcon: {fileID: 21300000, guid: 95f2b56c7225ba0499543cdaa4f3d2d9, type: 3}
     chestRarity: 0
     minCoinsRewarded: 100
     maxCoinsRewarded: 200
     minGemsRewarded: 10
     maxGemsRewarded: 120
-    openDuration: 1
-  - chestIcon: {fileID: 0}
+    openDuration: 15
+  - chestIcon: {fileID: 21300000, guid: b8733d97535c52341b5d32b24bbd0647, type: 3}
     chestRarity: 1
     minCoinsRewarded: 300
     maxCoinsRewarded: 500
     minGemsRewarded: 20
     maxGemsRewarded: 40
-    openDuration: 2
-  - chestIcon: {fileID: 0}
+    openDuration: 30
+  - chestIcon: {fileID: 21300000, guid: 5be9ccdaad416044b9be53fcbc25bc1b, type: 3}
     chestRarity: 2
     minCoinsRewarded: 600
     maxCoinsRewarded: 800
     minGemsRewarded: 45
     maxGemsRewarded: 60
-    openDuration: 3
-  - chestIcon: {fileID: 0}
+    openDuration: 120
+  - chestIcon: {fileID: 21300000, guid: 13cc8deaa75090148aad3356f7032628, type: 3}
     chestRarity: 3
     minCoinsRewarded: 1000
     maxCoinsRewarded: 1200
     minGemsRewarded: 80
     maxGemsRewarded: 100
-    openDuration: 4
+    openDuration: 180
