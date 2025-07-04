@@ -6,21 +6,26 @@ namespace ChestSystem.Player
     public class PlayerController
     {
         private PlayerModel playerModel;
+        private UIService uiService;
 
-        public PlayerController(PlayerModel playerModel) => this.playerModel = playerModel;
+        public PlayerController(PlayerModel playerModel, UIService uiService)
+        {
+            this.playerModel = playerModel;
+            this.uiService = uiService;
+        }
 
         public void IncrementPlayerCoinsBy(int value)
         {
             int currentPlayerCoins = playerModel.GetCoinCount();
             playerModel.SetCoinCount(currentPlayerCoins + value);
-            UIService.Instance.UpdateCurrencies();
+            uiService.UpdateCurrencies();
         }
 
         public void IncrementPlayerGemsBy(int value)
         {
             int currentPlayerGems = playerModel.GetGemCount();
             playerModel.SetGemCount(currentPlayerGems + value);
-            UIService.Instance.UpdateCurrencies();
+            uiService.UpdateCurrencies();
         }
 
         public void DecrementPlayerCoinsBy(int value)
@@ -30,7 +35,7 @@ namespace ChestSystem.Player
             currentPlayerCoins = (currentPlayerCoins <= 0) ? 0 : currentPlayerCoins;
 
             playerModel.SetCoinCount(currentPlayerCoins);
-            UIService.Instance.UpdateCurrencies();
+            uiService.UpdateCurrencies();
         }
 
         public void DecrementPlayerGemsBy(int value)
@@ -40,7 +45,7 @@ namespace ChestSystem.Player
             currentPlayerGems = (currentPlayerGems <= 0) ? 0 : currentPlayerGems;
 
             playerModel.SetGemCount(currentPlayerGems);
-            UIService.Instance.UpdateCurrencies();
+            uiService.UpdateCurrencies();
         }
 
         public bool HasSufficientCoins(int amount) => playerModel.GetCoinCount() >= amount;

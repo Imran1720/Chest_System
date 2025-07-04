@@ -32,14 +32,13 @@ namespace ChestSystem.Chest
 
         public void OnClick()
         {
-            // pop up to start timer or buy
-            if (UIService.Instance.GetChestService().CanUnlockChest())
+            if (ChestController.CanUnlockChest())
             {
-                UIService.Instance.GetPopUpService().ShowUnlockPopUP(ChestController);
+                ChestController.ShowUnlockPopUP();
             }
             else
             {
-                UIService.Instance.GetPopUpService().ShowChestOpeningPopUP();
+                ChestController.ShowChestOpeningPopUP();
             }
         }
 

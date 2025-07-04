@@ -1,4 +1,5 @@
 using ChestSystem.Chest;
+using ChestSystem.Core;
 using System;
 using TMPro;
 using UnityEngine;
@@ -69,6 +70,7 @@ namespace ChestSystem.UI.PopUp
 
         public void ShowSlotsFullPopUP()
         {
+            ClosePopUp();
             ShowPopUp();
             string warning = "Chest Slots Full!!";
             warningMessageText.text = warning;
@@ -77,6 +79,7 @@ namespace ChestSystem.UI.PopUp
 
         public void ShowChestOpeningPopUP()
         {
+            ClosePopUp();
             ShowPopUp();
             string warning = "Already chest is opening!!";
             warningMessageText.text = warning;
@@ -85,6 +88,8 @@ namespace ChestSystem.UI.PopUp
 
         public void ShowInsufficientFundPopUP()
         {
+            ClosePopUp();
+
             ShowPopUp();
             string warning = "Insufficient Funds!!";
             warningMessageText.text = warning;
@@ -109,7 +114,7 @@ namespace ChestSystem.UI.PopUp
 
         private void BuyWithGems()
         {
-            ICommand buyCommand = new BuyChestCommand(chestController, this);
+            ICommand buyCommand = new BuyChestCommand(chestController, GameService.Instance);
             commandInvoker.AddCommand(buyCommand);
         }
 

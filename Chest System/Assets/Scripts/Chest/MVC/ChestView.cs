@@ -67,6 +67,7 @@ public class ChestView : MonoBehaviour, IPointerDownHandler
 
     public void SetLockedUI(bool value)
     {
+        SetState(chestController.GetCurrentChestState());
         lockedStateUI.SetActive(value);
         payUI.SetActive(value);
         OpenUI.SetActive(!value);

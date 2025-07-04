@@ -1,4 +1,6 @@
+using ChestSystem.Core;
 using ChestSystem.UI;
+using ChestSystem.UI.PopUp;
 using System;
 using UnityEngine;
 
@@ -9,25 +11,27 @@ namespace ChestSystem.Chest
         public ChestController ChestController { get; set; }
         private ChestStateMachine chestStateMachine;
 
+        ChestService chestService;
+
         private float timer;
         private int costUpdateThreshold = 10;
         public UnlockingState(ChestStateMachine chestStateMachine, ChestController chestController)
         {
             this.chestStateMachine = chestStateMachine;
             ChestController = chestController;
+            chestService = GameService.Instance.GetChestService();
         }
 
         public void OnStateEntered()
         {
-            UIService.Instance.GetChestService().SetUnlockingChest(false);
+            chestService.SetIsChestUnlocking(true);
             ChestController.SetLockedUI(true);
             timer = ChestController.GetChestOpenDuration() * 60;
         }
 
         public void OnStateExited()
         {
-            // throw new System.NotImplementedException();
-            UIService.Instance.GetChestService().SetUnlockingChest(true);
+            chestService.SetIsChestUnlocking(false);
         }
 
         public void Update()
@@ -54,8 +58,7 @@ namespace ChestSystem.Chest
 
         public void OnClick()
         {
-            // pop up to buy with gems
-            UIService.Instance.GetPopUpService().ShowBuyPopUP(ChestController);
+            ChestController.ShowBuyPopUP();
         }
 
         public int GetChestBuyingCost()

@@ -1,3 +1,4 @@
+using ChestSystem.Core;
 using ChestSystem.UI;
 using UnityEngine;
 
@@ -24,10 +25,7 @@ namespace ChestSystem.Chest
             ChestController.SetLockedUI(false);
         }
 
-        public void OnStateExited()
-        {
-            UIService.Instance.ClearCommandHistory();
-        }
+        public void OnStateExited() => ChestController.ClearCommandHistory();
 
         public void Update()
         {
