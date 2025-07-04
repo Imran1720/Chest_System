@@ -27,6 +27,7 @@ namespace ChestSystem.Chest
         public void Reset()
         {
             chestView.Reset();
+            UIService.Instance.GetSlotService().FillSlot(slotData);
             ChangeToDefaultState();
         }
 

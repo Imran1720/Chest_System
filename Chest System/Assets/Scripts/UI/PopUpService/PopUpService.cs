@@ -25,10 +25,14 @@ namespace ChestSystem.UI.PopUp
         [SerializeField] private TextMeshProUGUI openingCostText;
 
         private ChestController chestController;
+        private CommandInvoker commandInvoker;
+
         private void Start()
         {
             InitializeButtonListeners();
         }
+
+        public void SetCommandInvoker(CommandInvoker commandInvoker) => this.commandInvoker = commandInvoker;
 
         private void InitializeButtonListeners()
         {
@@ -105,22 +109,10 @@ namespace ChestSystem.UI.PopUp
 
         private void BuyWithGems()
         {
-
-            int requiredGems = chestController.GetChestBuyingCost();
-            if (UIService.Instance.GetPlayerService().HasSufficientGemss(requiredGems))
-            {
-                chestController.OpenWithGems();
-                UIService.Instance.GetPlayerService().DecrementGemsBy(requiredGems);
-                UIService.Instance.UpdateCurrencies();
-                ClosePopUp();
-            }
-            else
-            {
-                ClosePopUp();
-                ShowInsufficientFundPopUP();
-            }
+            ICommand buyCommand = new BuyChestCommand(chestController, this);
+            commandInvoker.AddCommand(buyCommand);
         }
 
-        private void ClosePopUp() => ResetPopUp();
+        public void ClosePopUp() => ResetPopUp();
     }
 }

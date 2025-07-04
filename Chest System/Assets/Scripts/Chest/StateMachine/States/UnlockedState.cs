@@ -1,3 +1,4 @@
+using ChestSystem.UI;
 using UnityEngine;
 
 namespace ChestSystem.Chest
@@ -25,7 +26,7 @@ namespace ChestSystem.Chest
 
         public void OnStateExited()
         {
-            ChestController.EmptyCurrentSlot();
+            UIService.Instance.ClearCommandHistory();
         }
 
         public void Update()
