@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1690f7a707a584f48acb8a0fe29c2a78, type: 3}
+  m_Name: ChestTypeSO
+  m_EditorClassIdentifier: 
+  ChestTypeList:
+  - minCoinsRewarded: 100
+    maxCoinsRewarded: 200
+    minGemsRewarded: 10
+    maxGemsRewarded: 120
+    openDurationInMinutes: 15
+    chestRarity: 0
+    chestIcon: {fileID: 21300000, guid: 45e0e7716f2b3a44bb2c28c15c52588e, type: 3}
+  - minCoinsRewarded: 300
+    maxCoinsRewarded: 500
+    minGemsRewarded: 20
+    maxGemsRewarded: 40
+    openDurationInMinutes: 30
+    chestRarity: 1
+    chestIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  - minCoinsRewarded: 600
+    maxCoinsRewarded: 800
+    minGemsRewarded: 45
+    maxGemsRewarded: 60
+    openDurationInMinutes: 60
+    chestRarity: 2
+    chestIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  - minCoinsRewarded: 1000
+    maxCoinsRewarded: 1200
+    minGemsRewarded: 80
+    maxGemsRewarded: 100
+    openDurationInMinutes: 180
+    chestRarity: 3
+    chestIcon: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
