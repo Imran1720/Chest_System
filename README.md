@@ -52,21 +52,6 @@ The goal wasn’t just to copy the visuals — but to **replicate the system’s
 
 ---
 
-## 📸 Screenshots
-
-> *(Add UI screenshots of chest slots, timer transitions, and collected chests)*
-
----
-
-## 🚀 How to Run
-
-1. Clone or download this repository.
-2. Open the project in **Unity** (tested on *Unity 202X.X.XfX*).
-3. Open the `ChestSystem.unity` scene.
-4. Play the scene and interact with the chest system UI.
-
----
-
 ## 📚 Key Takeaways
 
 - Applied **multiple patterns** together in one cohesive system.
