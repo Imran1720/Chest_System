@@ -9,7 +9,6 @@ The goal wasn’t just to copy the visuals — but to **replicate the system’s
 ## Gameplay :
 [![Image](https://github.com/Imran1720/Chest_System/blob/ff234b739ae22411866c13a8948cc1ebe5bd3921/Design/Chest%20System%20Raw.mp4)](https://github.com/user-attachments/assets/a8a37038-45fe-4c8f-b655-c346ac8b42c5)
 
-![imange](https://github.com/user-attachments/assets/45a8d019-ec50-40dd-988c-8c3793112e46)
 
 ---
 
