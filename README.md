@@ -6,12 +6,12 @@ The goal wasn’t just to copy the visuals — but to **replicate the system’s
 
 ---
 
-## Links 
-**Gameplay** :[Gameplay Link](https://drive.google.com/file/d/1va_4fMDXXgKjs8tfSp1d18XGlwfCGrzz/view?usp=sharing)
-<br>
-**Project Architecture** : [Project Architecture Diagram](https://miro.com/app/board/uXjVIl2xyMs=/?share_link_id=506075442137)
+## Gameplay :
+[https://github.com/Imran1720/Chest_System/blob/ff234b739ae22411866c13a8948cc1ebe5bd3921/Design/Chest%20System%20Raw.mp4](https://github.com/user-attachments/assets/a8a37038-45fe-4c8f-b655-c346ac8b42c5)
 
 ---
+
+
 
 ## 🧠 What I Learned
 
@@ -63,3 +63,8 @@ The goal wasn’t just to copy the visuals — but to **replicate the system’s
 ## UI Design
 ![Image](https://github.com/Imran1720/Chest_System/blob/60789748e9f7a4b047790e86511f73134b20dfc4/Design/Chest%20System%20UI.png)
 <br>
+
+---
+
+## Links 
+**Project Architecture** : [Project Architecture Diagram](https://miro.com/app/board/uXjVIl2xyMs=/?share_link_id=506075442137)
